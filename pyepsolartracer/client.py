@@ -73,6 +73,42 @@ class EPsolarTracerClient:
             response = True
         return response
 
+    def readTest(self, values):
+        register = registerByName('Real time clock 1')
+        print values
+
+        self.client.write_registers(0x9013, values, unit=1)
+
+
+        result = self.client.read_holding_registers(0x9013, 3, unit=1)
+
+        secmin = result.registers[0]
+        print secmin
+        secs = (secmin & 0xff)
+        minuits = secmin >> 8
+
+        hrday = result.registers[1]
+        print hrday
+        hr = (hrday & 0xff)
+        day = hrday >> 8
+
+        monthyear = result.registers[2]
+        print monthyear
+        month = (monthyear & 0xff)
+        year = monthyear >> 8
+
+        print year, month
+        print day, hr
+        print minuits, secs
+
+    def encode(self, value):
+        # FIXME handle 2 word registers
+        rawvalue = int(value * self.times)
+        if rawvalue < 0:
+            rawvalue = (-rawvalue - 1) ^ 0xffff
+            #print rawvalue
+        return rawvalue
+
 __all__ = [
     "EPsolarTracerClient",
 ]

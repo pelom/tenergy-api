@@ -14,7 +14,7 @@ class Database(object):
 
 	def __init__(self):
 		self.sqlite = 'sqlite:///tenergy.db'
-		self.engine = create_engine(self.sqlite, echo=True)
+		self.engine = create_engine(self.sqlite, echo=False)
 
 	def drop(self):
 		ChargeEquipment.__table__.drop(self.engine)
@@ -28,7 +28,7 @@ class Database(object):
 		Session = sessionmaker(bind=self.engine)
 		self.db_session = Session()
 		return self.db_session
-	
+
 	def find(self, clazz, where):
 		session = self.createSession()
 		query = session.query(clazz)
@@ -39,4 +39,3 @@ class Database(object):
 		session = self.createSession()
 		session.add(entity)
 		session.commit()
-
