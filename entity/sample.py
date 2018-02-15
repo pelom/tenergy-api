@@ -11,36 +11,37 @@ from chargeEquipment import ChargeEquipment
 
 Base = declarative_base()
 
+
 class Sample(Base):
     __tablename__ = 'Sample'
 
     Id = Column(Integer, primary_key=True, autoincrement=True)
-    ChargeEquipmentId  = Column(Integer, ForeignKey(ChargeEquipment.Id), nullable=False)
+    ChargeEquipmentId = Column(Integer, ForeignKey(ChargeEquipment.Id), nullable=False)
 
-    VoltagePV        = Column(Float)
-    CurrentPV        = Column(Float)
-    PowerPV          = Column(Float)
-    PowerLowPV       = Column(Float)
-    PowerHighPV      = Column(Float)
+    VoltagePV = Column(Float)
+    CurrentPV = Column(Float)
+    PowerPV = Column(Float)
+    PowerLowPV = Column(Float)
+    PowerHighPV = Column(Float)
 
-    VoltageBattery   = Column(Float)
-    CurrentBattery   = Column(Float)
-    PowerBattery     = Column(Float)
-    PowerLowBattery  = Column(Float)
+    VoltageBattery = Column(Float)
+    CurrentBattery = Column(Float)
+    PowerBattery = Column(Float)
+    PowerLowBattery = Column(Float)
     PowerHighBattery = Column(Float)
 
-    VoltageDischarging   = Column(Float)
-    CurrentDischarging   = Column(Float)
-    PowerDischarging     = Column(Float)
-    PowerLowDischarging  = Column(Float)
+    VoltageDischarging = Column(Float)
+    CurrentDischarging = Column(Float)
+    PowerDischarging = Column(Float)
+    PowerLowDischarging = Column(Float)
     PowerHighDischarging = Column(Float)
 
-    BatterySOC                  = Column(Float)
-    VoltageSystemBattery        = Column(Float)
-    TemperatureBattery          = Column(Float)
-    TemperatureRemoteBattery    = Column(Float)
-    TemperatureInsideEquipment  = Column(Float)
-    TemperaturePowerComponents  = Column(Float)
+    BatterySOC = Column(Float)
+    VoltageSystemBattery = Column(Float)
+    TemperatureBattery = Column(Float)
+    TemperatureRemoteBattery = Column(Float)
+    TemperatureInsideEquipment = Column(Float)
+    TemperaturePowerComponents = Column(Float)
 
     CodeStatusBattery = Column(Integer)
     StatusBattery = Column(String(40))
@@ -53,9 +54,7 @@ class Sample(Base):
     CodeStatusCharge = Column(Integer)
     StatusCharge = Column(String(40))
 
-    CreatedDate      = Column(DateTime, default=datetime.datetime.utcnow)
+    CreatedDate = Column(DateTime, default=datetime.datetime.utcnow)
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
-
-
