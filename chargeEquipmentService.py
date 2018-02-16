@@ -40,17 +40,17 @@ class ChargeEquipmentService(object):
         value_map.setdefault('TimeClock', time_clock.isoformat())
 
         value = self.tracerService.readValue('Battery Type')
-        value_map.setdefault('BatteryType', self.define_option(value))
+        value_map.setdefault('BatteryType', ChargeEquipmentService.define_option(value))
 
         value = self.tracerService.readValue('Battery Capacity')
         value_map.setdefault('BatteryCapacity', value.value)
 
         value = self.tracerService.readValue('Management modes of battery charging and discharging')
         value.register.description = '0-Voltage Compensation,1-SOC'
-        value_map.setdefault('ManagementModeBattery', self.define_option(value))
+        value_map.setdefault('ManagementModeBattery', ChargeEquipmentService.define_option(value))
 
         value = self.tracerService.readValue('Battery rated voltage code')
-        value_map.setdefault('BatteryRatedVoltage', self.define_option(value))
+        value_map.setdefault('BatteryRatedVoltage', ChargeEquipmentService.define_option(value))
 
         value = self.tracerService.readValue('Temperature compensation coefficient')
         value_map.setdefault('TemperatureCompensationCoefficient', value.value)
@@ -110,7 +110,8 @@ class ChargeEquipmentService(object):
 
         return value_map
 
-    def define_option(self, value):
+    @staticmethod
+    def define_option(value):
         values = value.register.description.split(',')
 
         object_map = dict()

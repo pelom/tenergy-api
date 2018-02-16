@@ -1,11 +1,7 @@
-import os
-import sys
 import datetime
 
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Float
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from sqlalchemy import create_engine
 
 from chargeEquipment import ChargeEquipment
 
@@ -58,3 +54,35 @@ class Sample(Base):
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
+
+    def to_json(self):
+        return {
+            'Id': self.Id,
+            'BatterySOC': self.BatterySOC,
+            'VoltageSystemBattery': self.VoltageSystemBattery,
+            'StatusBattery': self.StatusBattery,
+            'StatusDischarging': self.StatusDischarging,
+            'StatusCharge': self.StatusCharge,
+            'CreatedDate': None if self.CreatedDate is None else self.CreatedDate.isoformat(),
+            'pv': {
+                'voltage': self.VoltagePV,
+                'current': self.CurrentPV,
+                'power': self.PowerPV,
+            },
+            'battery': {
+                'voltage': self.VoltageBattery,
+                'current': self.CurrentBattery,
+                'power': self.PowerBattery,
+            },
+            'discharging': {
+                'voltage': self.VoltageDischarging,
+                'current': self.CurrentDischarging,
+                'power': self.PowerDischarging,
+            },
+            'temperature': {
+                'Battery': self.TemperatureBattery,
+                'RemoteBattery': self.TemperatureRemoteBattery,
+                'InsideEquipment': self.TemperatureInsideEquipment,
+                'PowerComponents': self.TemperaturePowerComponents,
+            },
+        }

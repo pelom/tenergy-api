@@ -27,7 +27,7 @@ def W():
 
 
 def C():
-    return ['degree Celsius', 'ÂºC']  # \0xb0
+    return ['degree Celsius', 'ºC']  # \0xb0
 
 
 def PC():
