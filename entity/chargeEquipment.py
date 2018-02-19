@@ -1,11 +1,7 @@
-import os
-import sys
-import datetime
+from env import datetime_now_tz
 
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Float
+from sqlalchemy import Column, Integer, String, DateTime, Float
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from sqlalchemy import create_engine
 
 Base = declarative_base()
 
@@ -29,28 +25,28 @@ class ChargeEquipment(Base, object):
     ChargingMode = Column(Integer)
     ChargingModeName = Column(String(30))
     CurrentOfLoad = Column(Float)
-    CreatedDate = Column(DateTime, default=datetime.datetime.utcnow)
+    CreatedDate = Column(DateTime(timezone=True), default=datetime_now_tz())
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
 
     def to_json(self):
-       return {
-           'Id': self.Id,
-           'Port': self.Port,
-           'Model': self.Model,
-           'Version': self.Version,
-           'CurrentOfLoad': self.CurrentOfLoad,
-           'ChargingMode': self.ChargingModeName,
-           'CreatedDate':  None if self.CreatedDate is None else self.CreatedDate.isoformat(),
-           'pv': {
-               'voltage': self.VoltagePV,
-               'current': self.CurrentPV,
-               'power': self.PowerPV,
-           },
-           'battery': {
-               'voltage': self.VoltageBattery,
-               'current': self.CurrentBattery,
-               'power': self.PowerBattery,
-           },
-       }
+        return {
+            'Id': self.Id,
+            'Port': self.Port,
+            'Model': self.Model,
+            'Version': self.Version,
+            'CurrentOfLoad': self.CurrentOfLoad,
+            'ChargingMode': self.ChargingModeName,
+            'CreatedDate': None if self.CreatedDate is None else self.CreatedDate.isoformat(),
+            'pv': {
+                'voltage': self.VoltagePV,
+                'current': self.CurrentPV,
+                'power': self.PowerPV,
+            },
+            'battery': {
+                'voltage': self.VoltageBattery,
+                'current': self.CurrentBattery,
+                'power': self.PowerBattery,
+            },
+        }

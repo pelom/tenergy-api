@@ -1,112 +1,131 @@
 from tracerService import TracerService
-from entity.database import Database
+
 from entity.chargeEquipment import ChargeEquipment
+
+from entity.database import Database
+
+from env import log, config
 
 
 class ChargeEquipmentService(object):
+    def __init__(self, tracer_service=None, database=None):
+        if tracer_service is None:
+            raise ValueError('tracer_service is NULL')
 
-    def __init__(self, port=None):
-        self.database = Database()
+        if database is None:
+            raise ValueError('database is NULL')
 
-        if port is None:
-            self.tracerService = TracerService()
-        else:
-            self.tracerService = TracerService(serialclient=None, port=port)
+        self.database = database
+        self.tracer_service = tracer_service
 
     def register(self):
         device = self.device_info()
         self.database.save(device)
 
     def device_info(self):
-        equip_info = self.tracerService.deviceInfo()
+        equip_info = self.tracer_service.device_info()
+
         equip = ChargeEquipment()
         equip.Model = equip_info[1]
         equip.Version = equip_info[2]
-        equip.Port = self.tracerService.port
+        equip.Port = self.tracer_service.port
 
         field_map = self.equipment_fields()
-        register_map = self.tracerService.readProperty(equip, field_map)
+        register_map = self.tracer_service.read_property(equip, field_map)
 
         value_mode = register_map.get('ChargingMode')
         equip.ChargingModeName = value_mode.register.description.split(',')[value_mode.value]
         return equip
 
     def device_setting(self):
-        self.tracerService.connect()
+        self.tracer_service.connect()
 
         value_map = dict()
 
-        time_clock = self.tracerService.tracerClient.readRTC()
+        time_clock = self.tracer_service.tracer_client.read_rtc()
         value_map.setdefault('TimeClock', time_clock.isoformat())
 
-        value = self.tracerService.readValue('Battery Type')
+        value = self.tracer_service.read_value('Battery Type')
         value_map.setdefault('BatteryType', ChargeEquipmentService.define_option(value))
 
-        value = self.tracerService.readValue('Battery Capacity')
+        value = self.tracer_service.read_value('Battery Capacity')
         value_map.setdefault('BatteryCapacity', value.value)
 
-        value = self.tracerService.readValue('Management modes of battery charging and discharging')
+        value = self.tracer_service.read_value('Management modes of battery charging and discharging')
         value.register.description = '0-Voltage Compensation,1-SOC'
         value_map.setdefault('ManagementModeBattery', ChargeEquipmentService.define_option(value))
 
-        value = self.tracerService.readValue('Battery rated voltage code')
+        value = self.tracer_service.read_value('Battery rated voltage code')
         value_map.setdefault('BatteryRatedVoltage', ChargeEquipmentService.define_option(value))
 
-        value = self.tracerService.readValue('Temperature compensation coefficient')
+        value = self.tracer_service.read_value('Temperature compensation coefficient')
         value_map.setdefault('TemperatureCompensationCoefficient', value.value)
 
-        value = self.tracerService.readValue('Equalize duration')
+        value = self.tracer_service.read_value('Equalize duration')
         value_map.setdefault('EqualizeDuration', value.value)
 
-        value = self.tracerService.readValue('Boost duration')
+        value = self.tracer_service.read_value('Boost duration')
         value_map.setdefault('BoostDuration', value.value)
 
-        value = self.tracerService.readValue('Equalization voltage')
+        value = self.tracer_service.read_value('Equalization voltage')
         value_map.setdefault('EqualizationVoltage', value.value)
 
-        value = self.tracerService.readValue('Boost voltage')
+        value = self.tracer_service.read_value('Boost voltage')
         value_map.setdefault('BoostVoltage', value.value)
 
-        value = self.tracerService.readValue('Float voltage')
+        value = self.tracer_service.read_value('Float voltage')
         value_map.setdefault('FloatVoltage', value.value)
 
-        value = self.tracerService.readValue('Charging limit voltage')
+        value = self.tracer_service.read_value('Charging limit voltage')
         value_map.setdefault('ChargingLimitVoltage', value.value)
 
-        value = self.tracerService.readValue('Discharging limit voltage')
+        value = self.tracer_service.read_value('Discharging limit voltage')
         value_map.setdefault('DischargingLimitVoltage', value.value)
 
-        value = self.tracerService.readValue('Charging percentage')
+        value = self.tracer_service.read_value('Charging percentage')
         value_map.setdefault('ChargingPercentage', value.value)
 
-        value = self.tracerService.readValue('Discharging percentage')
+        value = self.tracer_service.read_value('Discharging percentage')
         value_map.setdefault('DischargingPercentage', value.value)
 
-        value = self.tracerService.readValue('Low voltage reconnect')
+        value = self.tracer_service.read_value('Low voltage reconnect')
         value_map.setdefault('LowVoltageReconnect', value.value)
 
-        value = self.tracerService.readValue('Low voltage disconnect')
+        value = self.tracer_service.read_value('Low voltage disconnect')
         value_map.setdefault('LowVoltageDisconnect', value.value)
 
-        value = self.tracerService.readValue('Over voltage reconnect')
+        value = self.tracer_service.read_value('Over voltage reconnect')
         value_map.setdefault('HighVoltageReconnect', value.value)
 
-        value = self.tracerService.readValue('High Volt.disconnect')
+        value = self.tracer_service.read_value('High Volt.disconnect')
         value_map.setdefault('HighVoltageDisconnect', value.value)
 
-        value = self.tracerService.readValue('Boost reconnect voltage')
+        value = self.tracer_service.read_value('Boost reconnect voltage')
         value_map.setdefault('BoostReconnectVoltage', value.value)
 
-        value = self.tracerService.readValue('Under voltage recover')
+        value = self.tracer_service.read_value('Under voltage recover')
         value_map.setdefault('UnderVoltageRecover', value.value)
 
-        value = self.tracerService.readValue('Under voltage warning')
+        value = self.tracer_service.read_value('Under voltage warning')
         value_map.setdefault('UnderVoltageWarning', value.value)
 
-        value = self.tracerService.readValue('Equalization charging cycle')
+        value = self.tracer_service.read_value('Equalization charging cycle')
         value_map.setdefault('EqualizationChargingCycle', value.value)
 
-        self.tracerService.disconnect()
+        value = self.tracer_service.read_value('Load controling modes')
+        value_map.setdefault('LoadControlingModes', ChargeEquipmentService.define_option(value))
+
+        value = self.tracer_service.read_value('Night TimeThreshold Volt.(NTTV)')
+        value_map.setdefault('NightTimeThresholdVolt', value.value)
+        value = self.tracer_service.read_value('Light signal startup (night) delay time')
+        value_map.setdefault('NightTimeThresholdDelay', value.value)
+
+        value = self.tracer_service.read_value('Day Time Threshold Volt.(DTTV)')
+        value_map.setdefault('DayTimeThresholdVolt', value.value)
+        value = self.tracer_service.read_value('Light signal turn off(day) delay time')
+        value_map.setdefault('DayTimeThresholdDelay', value.value)
+
+        self.tracer_service.disconnect()
 
         return value_map
 
@@ -150,12 +169,18 @@ class ChargeEquipmentService(object):
     def find_by_model(self, model):
         return self.database.find(ChargeEquipment, ChargeEquipment.Model == model)
 
+    def find_by_port(self, port):
+        return self.database.find(ChargeEquipment, ChargeEquipment.Port == port)
+
     def find_all(self):
         return self.database.find(ChargeEquipment)
 
 
 if __name__ == "__main__":
-    service = ChargeEquipmentService()
-# service.register()
-# service.database.drop()
-# service.database.create()
+    database = Database.get_instance()
+
+    port = config.get('usb')[0]
+    tracer_service = TracerService(serialclient=None, port=port)
+
+    service = ChargeEquipmentService(tracer_service=tracer_service, database=database)
+    print service.register()

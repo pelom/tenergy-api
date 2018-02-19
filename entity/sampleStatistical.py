@@ -1,6 +1,6 @@
-import datetime
+from env import datetime_now_tz
 
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Float
+from sqlalchemy import Column, ForeignKey, Integer, DateTime, Float
 from sqlalchemy.ext.declarative import declarative_base
 
 from chargeEquipment import ChargeEquipment
@@ -34,7 +34,7 @@ class SampleStatistical(Base):
     BatteryTemp = Column(Float)
 
     AmbientTemp = Column(Float)
-    CreatedDate = Column(DateTime, default=datetime.datetime.utcnow)
+    CreatedDate = Column(DateTime(timezone=True), default=datetime_now_tz())
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)

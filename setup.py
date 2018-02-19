@@ -8,5 +8,6 @@ setup(
     license='MIT',
     author='andreleite',
     author_email='pelommedrado@gmail.com',
-    description='Epsolar TracerA - Charge Equipment - API'
+    description='Epsolar TracerA - Charge Equipment - API',
+    install_requires=['pymodbus', 'pytz', 'Flask', 'six', 'SQLAlchemy']
 )

@@ -27,7 +27,7 @@ def W():
 
 
 def C():
-    return ['degree Celsius', 'ºC']  # \0xb0
+    return ['degree Celsius', '^C']  # \0xb0
 
 
 def PC():
@@ -473,7 +473,7 @@ registersChargingEquipmentSettingParameter = [
              AH, 1),
     # Temperature compensation coefficient
     Register("Temperature compensation coefficient",
-             0x9002, "Range 0-9 mV/ºC/2V",
+             0x9002, "Range 0-9 mV/^C/2V",
              I, 100),
     # High Volt.disconnect
     Register("High Volt.disconnect",

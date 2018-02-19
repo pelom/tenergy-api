@@ -76,32 +76,32 @@ class EPsolarTracerClient:
             response = True
         return response
 
-    def readRTC(self):
+    def read_rtc(self):
         register = registerByName('Real time clock 1')
-        sizeAddress = 3
-        result = self.client.read_holding_registers(register.address, sizeAddress, unit=self.unit)
-        return self.decodeRTC(result.registers)
+        size_address = 3
+        result = self.client.read_holding_registers(register.address, size_address, unit=self.unit)
+        return self.decode_rtc(result.registers)
 
-    def writeRTC(self, datetime):
+    def write_rtc(self, datetime):
         register = registerByName('Real time clock 1')
-        values = self.encodeRTC(datetime)
+        values = self.encode_rtc(datetime)
         self.client.write_registers(register.address, values, unit=self.unit)
         return True
 
-    def decodeRTC(self, rtc):
+    def decode_rtc(self, rtc):
         s = 2000
-        secMin = rtc[0]
-        hourDay = rtc[1]
-        monthYear = rtc[2]
-        secs = (secMin & 0xff)
-        hour = (hourDay & 0xff)
-        month = (monthYear & 0xff)
-        minut = secMin >> 8
-        day = hourDay >> 8
-        year = monthYear >> 8
+        sec_min = rtc[0]
+        hour_day = rtc[1]
+        month_year = rtc[2]
+        secs = (sec_min & 0xff)
+        hour = (hour_day & 0xff)
+        month = (month_year & 0xff)
+        minut = sec_min >> 8
+        day = hour_day >> 8
+        year = month_year >> 8
         return datetime(s + year, month, day, hour, minut, secs)
 
-    def encodeRTC(self, datetime):
+    def encode_rtc(self, datetime):
         s = 2000
         rtc1 = int((datetime.minute << 8) | datetime.second)
         rtc2 = int((datetime.day << 8) | datetime.hour)

@@ -1,0 +1,25 @@
+{
+  "database": {
+    "host": "sqlite:///",
+    "db": "/home/andreleite/.tenergy/tenergy.db",
+    "user": "username",
+    "passwd": "password",
+    "echo": true,
+    "create_drop": false
+  },
+  "serve": {
+    "ip": "0.0.0.0",
+    "port": 5000,
+    "debug": true
+  },
+  "usb": [
+    "/dev/ttyXRUSB0"
+  ],
+  "timezone": "America/Sao_Paulo",
+  "log": {
+    "filepath" : "/home/andreleite/.tenergy/ternergy.log",
+    "outputfile" : true,
+    "level" : "DEBUG",
+    "formatter" : "[%(asctime)s %(lineno)d %(levelname)s %(name)s] %(message)s"
+  }
+}

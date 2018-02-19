@@ -6,7 +6,7 @@ from service.tracerService import TracerService
 from service.chargeEquipmentService import ChargeEquipmentService
 from service.sampleService import SampleService
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 
 logger = log(__name__)
 logger.info('Tenergy Serve')
@@ -81,6 +81,23 @@ def device_statistical():
     return jsonify(sample.to_json())
 
 
+@app.route("/device/monitor", methods=['GET'])
+def device_monitor():
+    logger.info('device_monitor()')
+
+    charge_port = request.headers.get('charge_port', usb_port)
+    tracer_service = get_instance_tracer(charge_port)
+    sample_service = get_instance_sample(tracer_service)
+
+    sample = sample_service.sampling()
+    statistical = sample_service.sample_statistical()
+    rtc = tracer_service.tracer_client.read_rtc()
+    samplejson = sample.to_json()
+    samplejson.setdefault('statistical', statistical.to_json())
+    samplejson.setdefault('rtc', rtc.isoformat())
+    return jsonify(samplejson)
+
+
 @app.route("/chargecontroller/list")
 def charge_controller_list():
     logger.info('charge_controller_list()')
@@ -93,6 +110,11 @@ def charge_controller_list():
     for charge in charge_equip_list:
         result_json.append(charge.to_json())
     return jsonify(result_json)
+
+
+@app.route('/')
+def home():
+    return render_template('home.html')
 
 
 if __name__ == "__main__":

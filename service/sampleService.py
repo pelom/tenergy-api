@@ -1,8 +1,9 @@
-import time
-
 from tracerService import TracerService
 
 from entity.database import Database
+
+from env import log, config
+
 from entity.sample import Sample
 from entity.sampleStatistical import SampleStatistical
 
@@ -10,13 +11,15 @@ from chargeEquipmentService import ChargeEquipmentService
 
 
 class SampleService(object):
-    def __init__(self, port=None):
-        self.database = Database()
+    def __init__(self, tracer_service=None, database=None):
+        if tracer_service is None:
+            raise ValueError('tracer_service is NULL')
 
-        if port is None:
-            self.tracerService = TracerService()
-        else:
-            self.tracerService = TracerService(serialclient=None, port=port)
+        if database is None:
+            raise ValueError('database is NULL')
+
+        self.database = database
+        self.tracer_service = tracer_service
 
     def register(self, charge_equip):
         sample = self.sampling(charge_equip.Id)
@@ -24,19 +27,19 @@ class SampleService(object):
         return sample
 
     def sampling(self, charge_equip_id=None):
-        self.tracerService.connect()
+        self.tracer_service.connect()
 
         sample = Sample()
         sample.ChargeEquipmentId = charge_equip_id
 
         field_map = SampleService.sampling_fields()
-        register_map = self.tracerService.readProperty(sample, field_map)
+        register_map = self.tracer_service.read_property(sample, field_map)
 
         self.set_code_status_equipment(sample, register_map)
         self.set_code_status_battery(sample, register_map)
         self.set_code_status_discharging(sample, register_map)
 
-        self.tracerService.disconnect()
+        self.tracer_service.disconnect()
         return sample
 
     def register_statistical(self, charge_equip):
@@ -45,14 +48,14 @@ class SampleService(object):
         return statis
 
     def sample_statistical(self, charge_equip_id=None):
-        self.tracerService.connect()
+        self.tracer_service.connect()
 
         sample_statis = SampleStatistical()
         sample_statis.ChargeEquipmentId = charge_equip_id
 
         field_map = SampleService.statistical_fields()
-        self.tracerService.readProperty(sample_statis, field_map)
-        self.tracerService.disconnect()
+        self.tracer_service.read_property(sample_statis, field_map)
+        self.tracer_service.disconnect()
         return sample_statis
 
     @staticmethod
@@ -108,14 +111,14 @@ class SampleService(object):
 
     def set_code_status_discharging(self, sampling, register_map):
         discharging_status = register_map.get('CodeStatusDischarging')
-        option_map = self.tracerService.parseOptionMap(discharging_status.register.description)
+        option_map = self.tracer_service.parse_option(discharging_status.register.description)
         option_value = option_map.get('D0:')
         if option_value is not None:
             sampling.StatusDischarging = option_value.split(',')[discharging_status.value]
 
     def set_code_status_battery(self, sampling, register_map):
         battery_status = register_map.get('CodeStatusBattery')
-        option_map = self.tracerService.parseOptionMap(battery_status.register.description)
+        option_map = self.tracer_service.parse_option(battery_status.register.description)
         option_value = option_map.get('D3-D0:')
         if option_value is not None:
             battery_level = 0b1111 & battery_status.value
@@ -126,7 +129,7 @@ class SampleService(object):
         if equip_status.value >> 4:
             print 'CodeStatusEquipment ERROR'
 
-        option_map = self.tracerService.parseOptionMap(equip_status.register.description)
+        option_map = self.tracer_service.parse_option(equip_status.register.description)
         option_value = option_map.get('D3-2:')
         if option_value is not None:
             charge_status = 0b11 & (equip_status.value >> 2)
@@ -156,71 +159,18 @@ class SampleService(object):
 
 
 if __name__ == "__main__":
-    chargeEquipmentService = ChargeEquipmentService()
+    database = Database.get_instance()
+
+    port = config.get('usb')[0]
+    tracer_service = TracerService(serialclient=None, port=port)
+
+    chargeEquipmentService = ChargeEquipmentService(tracer_service=tracer_service, database=database)
     chargeEquipmentService.database.create()
     chargeEquipList = chargeEquipmentService.find_by_model('Tracer4210A')
     chargeEquip = chargeEquipList[0]
 
-    samplingService = SampleService()
-    while True:
-        samplingService.register_statistical(chargeEquip)
-        time.sleep(60 * 60)
-
-# if __name__ == "__main__":
-#     chargeEquipmentService = ChargeEquipmentService()
-#     chargeEquipList = chargeEquipmentService.find_by_model('Tracer4210A')
-#
-#     chargeEquip = chargeEquipList[0]
-#     samplingService = SampleService()
-#     while True:
-#         sampling = samplingService.register(chargeEquip)
-#
-#         print 'CHARGE EQUIPMENT'
-#         print 'chargeEquip.Model: ', chargeEquip.Model
-#         print 'chargeEquip.Version: ', chargeEquip.Version
-#         print 'chargeEquip.ChargingModeName: ', chargeEquip.ChargingModeName
-#         print 'chargeEquip.CurrentOfLoad: ', chargeEquip.CurrentOfLoad
-#         print 'chargeEquip.VoltageBattery: ', chargeEquip.VoltageBattery
-#         print 'chargeEquip.PowerPV: ', chargeEquip.PowerPV
-#
-#         print 'PV'
-#         print 'sampling.VoltagePV: ', sampling.VoltagePV
-#         print 'sampling.CurrentPV: ', sampling.CurrentPV
-#         print 'sampling.PowerPV: ', sampling.PowerPV
-#         print 'sampling.PowerLowPV: ', sampling.PowerLowPV
-#         print 'sampling.PowerHighPV: ', sampling.PowerHighPV
-#
-#         print 'BATTERY'
-#         print 'sampling.VoltageBattery: ', sampling.VoltageBattery
-#         print 'sampling.CurrentBattery: ', sampling.CurrentBattery
-#         print 'sampling.PowerBattery: ', sampling.PowerBattery
-#         print 'sampling.PowerLowBattery: ', sampling.PowerLowBattery
-#         print 'sampling.PowerHighBattery: ', sampling.PowerHighBattery
-#
-#         print 'LOAD'
-#         print 'sampling.VoltageDischarging: ', sampling.VoltageDischarging
-#         print 'sampling.CurrentDischarging: ', sampling.CurrentDischarging
-#         print 'sampling.PowerDischarging: ', sampling.PowerDischarging
-#         print 'sampling.PowerLowDischarging: ', sampling.PowerLowDischarging
-#         print 'sampling.PowerHighDischarging: ', sampling.PowerHighDischarging
-#
-#         print 'TEMPERATURE'
-#         print 'sampling.TemperatureBattery: ', sampling.TemperatureBattery
-#         print 'sampling.TemperatureRemoteBattery: ', sampling.TemperatureRemoteBattery
-#         print 'sampling.TemperaturePowerComponents: ', sampling.TemperaturePowerComponents
-#         print 'sampling.TemperatureInsideEquipment: ', sampling.TemperatureInsideEquipment
-#
-#         print 'STATUS'
-#         print 'sampling.BatterySOC: ', sampling.BatterySOC
-#         print 'sampling.VoltageSystemBattery: ', sampling.VoltageSystemBattery
-#
-#         print 'sampling.CodeStatusBattery: ', sampling.CodeStatusBattery
-#         print 'sampling.StatusBattery: ', sampling.StatusBattery
-#         print 'sampling.CodeStatusEquipment: ', sampling.CodeStatusEquipment
-#
-#         print 'sampling.CodeStatusCharge: ', sampling.CodeStatusCharge
-#         print 'sampling.StatusCharge: ', sampling.StatusCharge
-#
-#         print 'sampling.CodeStatusDischarging: ', sampling.CodeStatusDischarging
-#         print 'sampling.StatusDischarging: ', sampling.StatusDischarging
-#         time.sleep(60 * 5)
+    samplingService = SampleService(tracer_service=tracer_service, database=database)
+#    samplingService.register_statistical(chargeEquip)
+#    samplingService.register(chargeEquip)
+#    while True:
+#        time.sleep(60 * 60)

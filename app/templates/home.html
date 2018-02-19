@@ -1,0 +1,267 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="card-deck">
+    <div class="card text-white bg-secondary">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal"><i class="fas fa-mobile"></i> Tracer 4210A
+                <small id="rtc" class="float-right"><i class="far fa-clock"></i></small>
+            </h4>
+        </div>
+        <div class="card-footer">
+            <div class="card-deck">
+                <div class="row mb-3">
+                    <div class="col-lg-4 mb-4 col-md-12">
+                        <div id="ctn_pv" class="card">
+                            <div class="card-header">
+                                <h4 class="my-0"><i id="pvicon"class="fas fa-moon"></i> Painel</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Tensão</small>
+                                        <span class="float-right">
+                                            <strong id="pvvoltage"></strong> <small>V</small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Corrente</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="pvcurrent"></strong> <small>A</small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Potência</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="pvpower"></strong> <small>W</small></span>
+                                    </h4>
+                                </div>
+
+                                <div class="line-info"><br></div>
+                                <div class="line-info"><br></div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Enêrgia Gerada</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="generatedenergy"></strong> <small>kWh</small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info"><br></div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Tensão Máxima</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="pvvoltagemax"></strong> <small>V</small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Tensão Mínima</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="pvvoltagemin"></strong> <small>V</small></span>
+                                    </h4>
+                                </div>
+                                <!--button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4 col-md-12">
+                        <div class="card text-white bg-dark">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal"><i class="fas fa-battery-full"></i> Bateria</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Tensão</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="batteryvoltage"></strong> <small>V</small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Corrente</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="batterycurrent"></strong> <small>A</small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Potência</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="batterypower"></strong> <small>W</small></span>
+                                    </h4>
+                                </div>
+
+                                <div class="line-info"><br></div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">SOC</small>
+                                        <div class="progress float-right" style="width: 50%;">
+                                            <div id="batterysoc" class="progress-bar bg-success progress-bar-striped"
+                                                 role="progressbar" style="width: 0%"><strong id="batterysocvalue"></strong>                                  </div>
+                                        </div>
+                                    </h4>
+                                </div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Status</small>
+                                        <span class="float-right font-weight-bold">
+                                            <small id="batterystatus"></small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Carga</small>
+                                        <span class="float-right font-weight-bold">
+                                            <small id="batterycharge"></small></span>
+                                    </h4>
+                                </div>
+
+                                <div class="line-info"><br></div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Temperatura</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="batterytemperature"></strong> <small>ºC</small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Remota</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="batterytemperatureremote"></strong> <small>ºC</small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info"><br></div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Tensão Máxima</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="batteryvoltagemax"></strong> <small>V</small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Tensão Mínima</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="batteryvoltagemin"></strong> <small>V</small></span>
+                                    </h4>
+                                </div>
+                                <!--button type="button" class="btn btn-lg btn-block btn-primary">Get started</button-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-4 col-md-12">
+                        <div class="card text-white bg-primary">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal"><i class="fas fa-bolt"></i> Inversor</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Tensão</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="dischargingvoltage"></strong> <small>V</small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Corrente</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="dischargingcurrent"></strong> <small>A</small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Potência</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="dischargingpower"></strong> <small>W</small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info"><br></div>
+                                <div class="line-info"><br></div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Enêrgia Consumida</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="consumedenergy"></strong> <small>kWh</small></span>
+                                    </h4>
+                                </div>
+                                <!--button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="line-info">
+                <h4 class="card-title">
+                    <small class="float-left">Tensão Sistema</small>
+                    <span class="float-right font-weight-bold">
+                        <strong id="systemvoltage"></strong> <small>V</small></span>
+                </h4>
+            </div>
+            <div class="line-info">
+                <h4 class="card-title">
+                    <small class="float-left">Temperatura</small>
+                    <span class="float-right font-weight-bold">
+                        <strong id="temperatureinsideequipment"></strong> <small>ºC</small></span>
+                </h4>
+            </div>
+            <div class="line-info">
+                <h4 class="card-title">
+                    <small class="float-left">Temperatura Componentes</small>
+                    <span class="float-right font-weight-bold">
+                        <strong id="temperaturepowercomponents"></strong> <small>ºC</small></span>
+                </h4>
+            </div>
+            <div class="line-info">
+                <h4 class="card-title">
+                    <small class="float-left">Saída (Load)</small>
+                    <span class="float-right font-weight-bold">
+                        <small id="statusdischarging"></small></span>
+                </h4>
+            </div>
+            <!--button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button-->
+        </div>
+    </div>
+    <!--div class="card bg-light mb-3">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal"><i class="fas fa-mobile"></i> Tracer 4210A</h4>
+        </div>
+        <div class="card-body">
+            <div class="line-info">
+                <h4 class="card-title">
+                    <small class="float-left">Tensão</small>
+                    <span class="float-right font-weight-bold">28.85 <small>V</small></span>
+                </h4>
+            </div>
+            <div class="line-info">
+                <h4 class="card-title">
+                    <small class="float-left">Corrente</small>
+                    <span class="float-right font-weight-bold">0.05 <small>A</small></span>
+                </h4>
+            </div>
+            <div class="line-info">
+                <h4 class="card-title">
+                    <small class="float-left">Potência</small>
+                    <span class="float-right font-weight-bold">10.50 <small>W</small></span>
+                </h4>
+            </div>
+            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button>
+        </div>
+    </div-->
+
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}
