@@ -1,3 +1,5 @@
+import datetime
+
 from tracerService import TracerService
 
 from entity.database import Database
@@ -9,6 +11,7 @@ from entity.sampleStatistical import SampleStatistical
 
 from chargeEquipmentService import ChargeEquipmentService
 
+from sqlalchemy import func, desc
 
 class SampleService(object):
     def __init__(self, tracer_service=None, database=None):
@@ -157,6 +160,79 @@ class SampleService(object):
         value_fields['AmbientTemp'] = 'Ambient Temp.'
         return value_fields
 
+    def get_sample(self):
+        now = datetime.datetime.now()
+        start_date = datetime.datetime(now.year, now.month, now.day, 0, 0, 0)
+        end_date = datetime.datetime(now.year, now.month, now.day, 23, 59, 59)
+
+        session = self.database.create_session()
+        query = session.query(Sample)
+        query = query.order_by(desc(Sample.CreatedDate))
+        query = query.limit(1)
+        sample = query.first()
+
+        query = session.query(func.avg(Sample.VoltagePV), func.max(Sample.VoltagePV), func.min(Sample.VoltagePV),
+                              func.avg(Sample.VoltageBattery), func.max(Sample.VoltageBattery), func.min(Sample.VoltageBattery))
+        query = query.filter(Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
+        pvvoltage = query.first()
+
+        query = session.query(func.avg(Sample.CurrentPV), func.max(Sample.CurrentPV), func.min(Sample.CurrentPV))
+        query = query.filter(Sample.CurrentPV > 0, Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
+        pvcurrent = query.first()
+        if pvcurrent[0] is None:
+            pvcurrent = [0, 0, 0]
+
+        query = session.query(func.min(Sample.CreatedDate), func.max(Sample.CreatedDate),
+            func.avg(Sample.PowerPV), func.max(Sample.PowerPV), func.min(Sample.PowerPV))
+        query = query.filter(Sample.PowerPV > 0, Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
+        pvpower = query.first()
+
+        fator = 0
+        hour = 0
+        minute = 0
+
+        if pvpower[0] is None:
+            pvpower = ['', '', 0, 0, 0]
+        else:
+            diff_time = pvpower[1] - pvpower[0]
+            hour = diff_time.seconds // 3600
+            minute = (diff_time.seconds // 60) % 60
+            fator = float(hour + (minute / float(60)))
+
+        return {
+            "sample": sample.to_json(),
+            "generated": {
+                "start": pvpower[0],
+                "end": pvpower[1],
+                "hour": hour,
+                "minute": minute,
+                "power": {
+                    "avg": pvpower[2],
+                    "max": pvpower[3],
+                    "min": pvpower[4],
+                    "total": pvpower[2]*fator
+                },
+                "current": {
+                    "avg": pvcurrent[0],
+                    "max": pvcurrent[1],
+                    "min": pvcurrent[2],
+                    "total": pvcurrent[0] * fator
+                },
+                "voltage": {
+                    "avg": pvvoltage[0],
+                    "max": pvvoltage[1],
+                    "min": pvvoltage[2]
+                }
+            },
+            "battery": {
+                "voltage": {
+                    "avg": pvvoltage[3],
+                    "max": pvvoltage[4],
+                    "min": pvvoltage[5]
+                }
+            }
+        }
+
 
 if __name__ == "__main__":
     database = Database.get_instance()
@@ -170,6 +246,7 @@ if __name__ == "__main__":
     chargeEquip = chargeEquipList[0]
 
     samplingService = SampleService(tracer_service=tracer_service, database=database)
+    print samplingService.get_sample()
 #    samplingService.register_statistical(chargeEquip)
 #    samplingService.register(chargeEquip)
 #    while True:

@@ -34,7 +34,7 @@ class SampleStatistical(Base):
     BatteryTemp = Column(Float)
 
     AmbientTemp = Column(Float)
-    CreatedDate = Column(DateTime(timezone=True), default=datetime_now_tz())
+    CreatedDate = Column(DateTime(timezone=True), default=datetime_now_tz)
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)

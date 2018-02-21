@@ -2,6 +2,12 @@
 
 {% block content %}
 
+{{url_context}}
+{{ip}}
+{{url}}
+<script>
+    var url_context = '{{url}}'
+</script>
 <div class="card-deck">
     <div class="card text-white bg-secondary">
         <div class="card-header">
@@ -12,8 +18,8 @@
         <div class="card-footer">
             <div class="card-deck">
                 <div class="row mb-3">
-                    <div class="col-lg-4 mb-4 col-md-12">
-                        <div id="ctn_pv" class="card">
+                    <div class="col-lg-4 mb-4 col-md-12 col-info">
+                        <div id="ctn_pv" class="card text-dark">
                             <div class="card-header">
                                 <h4 class="my-0"><i id="pvicon"class="fas fa-moon"></i> Painel</h4>
                             </div>
@@ -39,8 +45,6 @@
                                             <strong id="pvpower"></strong> <small>W</small></span>
                                     </h4>
                                 </div>
-
-                                <div class="line-info"><br></div>
                                 <div class="line-info"><br></div>
                                 <div class="line-info">
                                     <h4 class="card-title">
@@ -49,26 +53,93 @@
                                             <strong id="generatedenergy"></strong> <small>kWh</small></span>
                                     </h4>
                                 </div>
+
                                 <div class="line-info"><br></div>
+                                <div class="line-info text-center"><h6>Potência</h6></div>
                                 <div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Tensão Máxima</small>
+                                    <h6 class="card-title">
+                                        <small class="float-left">Média</small>
                                         <span class="float-right font-weight-bold">
-                                            <strong id="pvvoltagemax"></strong> <small>V</small></span>
-                                    </h4>
+                                            <strong id="pvpoweravg"></strong> <small>W</small></span>
+                                    </h6>
+                                </div>
+                                <div class="line-info">
+                                    <h6 class="card-title">
+                                        <small class="float-left">Máxima</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="pvpowermax"></strong> <small>W</small></span>
+                                    </h6>
+                                </div>
+                                <div class="line-info">
+                                    <h6 class="card-title">
+                                        <small class="float-left">Mínima</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="pvpowermin"></strong> <small>W</small></span>
+                                    </h6>
                                 </div>
                                 <div class="line-info">
                                     <h4 class="card-title">
-                                        <small class="float-left">Tensão Mínima</small>
+                                        <small class="float-left">Total</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="pvpowertotal"></strong> <small>Wh</small></span>
+                                    </h4>
+                                </div>
+                                <div class="line-info text-center"><h6>Tensão</h6></div>
+                                <div class="line-info">
+                                    <h6 class="card-title">
+                                        <small class="float-left">Média</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="pvvoltageavg"></strong> <small>V</small></span>
+                                    </h6>
+                                </div>
+                                <div class="line-info">
+                                    <h6 class="card-title">
+                                        <small class="float-left">Máxima</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="pvvoltagemax"></strong> <small>V</small></span>
+                                    </h6>
+                                </div>
+                                <div class="line-info">
+                                    <h6 class="card-title">
+                                        <small class="float-left">Mínima</small>
                                         <span class="float-right font-weight-bold">
                                             <strong id="pvvoltagemin"></strong> <small>V</small></span>
+                                    </h6>
+                                </div>
+                                <div class="line-info text-center"><h6>Corrente</h6></div>
+                                <div class="line-info">
+                                    <h6 class="card-title">
+                                        <small class="float-left">Média</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="pvcurrentavg"></strong> <small>A</small></span>
+                                    </h6>
+                                </div>
+                                <div class="line-info">
+                                    <h6 class="card-title">
+                                        <small class="float-left">Máxima</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="pvcurrentmax"></strong> <small>A</small></span>
+                                    </h6>
+                                </div>
+                                <div class="line-info">
+                                    <h6 class="card-title">
+                                        <small class="float-left">Mínima</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="pvcurrentmin"></strong> <small>A</small></span>
+                                    </h6>
+                                </div>
+                                 <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Total</small>
+                                        <span class="float-right font-weight-bold">
+                                            <strong id="pvcurrenttotal"></strong> <small>Ah</small></span>
                                     </h4>
                                 </div>
                                 <!--button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button-->
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 mb-4 col-md-12">
+                    <div class=" col-info col-lg-4 mb-4 col-md-12">
                         <div class="card text-white bg-dark">
                             <div class="card-header">
                                 <h4 class="my-0 font-weight-normal"><i class="fas fa-battery-full"></i> Bateria</h4>
@@ -137,25 +208,26 @@
                                     </h4>
                                 </div>
                                 <div class="line-info"><br></div>
+                                <div class="line-info text-center"><h6>Tensão</h6></div>
                                 <div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Tensão Máxima</small>
+                                    <h6 class="card-title">
+                                        <small class="float-left">Máxima</small>
                                         <span class="float-right font-weight-bold">
                                             <strong id="batteryvoltagemax"></strong> <small>V</small></span>
-                                    </h4>
+                                    </h6>
                                 </div>
                                 <div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Tensão Mínima</small>
+                                    <h6 class="card-title">
+                                        <small class="float-left">Mínima</small>
                                         <span class="float-right font-weight-bold">
                                             <strong id="batteryvoltagemin"></strong> <small>V</small></span>
-                                    </h4>
+                                    </h6>
                                 </div>
                                 <!--button type="button" class="btn btn-lg btn-block btn-primary">Get started</button-->
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 mb-4 col-md-12">
+                    <div class=" col-info col-lg-4 mb-4 col-md-12">
                         <div class="card text-white bg-primary">
                             <div class="card-header">
                                 <h4 class="my-0 font-weight-normal"><i class="fas fa-bolt"></i> Inversor</h4>

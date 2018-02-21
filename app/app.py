@@ -89,13 +89,16 @@ def device_monitor():
     tracer_service = get_instance_tracer(charge_port)
     sample_service = get_instance_sample(tracer_service)
 
-    sample = sample_service.sampling()
-    statistical = sample_service.sample_statistical()
-    rtc = tracer_service.tracer_client.read_rtc()
-    samplejson = sample.to_json()
-    samplejson.setdefault('statistical', statistical.to_json())
-    samplejson.setdefault('rtc', rtc.isoformat())
-    return jsonify(samplejson)
+    sample = sample_service.get_sample()
+    return jsonify(sample)
+    #
+    # sample = sample_service.sampling()
+    # statistical = sample_service.sample_statistical()
+    # rtc = tracer_service.tracer_client.read_rtc()
+    # samplejson = sample.to_json()
+    # samplejson.setdefault('statistical', statistical.to_json())
+    # samplejson.setdefault('rtc', rtc.isoformat())
+    #return jsonify(samplejson)
 
 
 @app.route("/chargecontroller/list")
@@ -114,7 +117,10 @@ def charge_controller_list():
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    url_context = 'http://{0}:{1}/'.format('192.168.0.1', '5000')
+    ip = request.remote_addr
+    url = request.url
+    return render_template('home.html', url_context=url_context, ip=ip, url=url)
 
 
 if __name__ == "__main__":

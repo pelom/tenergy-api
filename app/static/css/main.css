@@ -8,3 +8,8 @@ body {
     margin-bottom: 10px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
+
+.col-info {
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+}

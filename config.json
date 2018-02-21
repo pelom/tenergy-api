@@ -4,7 +4,7 @@
     "db": "/home/andreleite/.tenergy/tenergy.db",
     "user": "username",
     "passwd": "password",
-    "echo": true,
+    "echo": false,
     "create_drop": false
   },
   "serve": {
@@ -18,8 +18,8 @@
   "timezone": "America/Sao_Paulo",
   "log": {
     "filepath" : "/home/andreleite/.tenergy/ternergy.log",
-    "outputfile" : true,
-    "level" : "DEBUG",
+    "outputfile" : false,
+    "level" : "ERROR",
     "formatter" : "[%(asctime)s %(lineno)d %(levelname)s %(name)s] %(message)s"
   }
 }

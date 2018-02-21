@@ -25,7 +25,7 @@ class ChargeEquipment(Base, object):
     ChargingMode = Column(Integer)
     ChargingModeName = Column(String(30))
     CurrentOfLoad = Column(Float)
-    CreatedDate = Column(DateTime(timezone=True), default=datetime_now_tz())
+    CreatedDate = Column(DateTime(timezone=True), default=datetime_now_tz)
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)

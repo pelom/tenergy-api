@@ -50,7 +50,7 @@ class Sample(Base):
     CodeStatusCharge = Column(Integer)
     StatusCharge = Column(String(40))
 
-    CreatedDate = Column(DateTime(timezone=True), default=datetime_now_tz())
+    CreatedDate = Column(DateTime(timezone=True), default=datetime_now_tz)
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
