@@ -171,20 +171,28 @@ class SampleService(object):
         query = query.limit(1)
         sample = query.first()
 
-        query = session.query(func.avg(Sample.VoltagePV), func.max(Sample.VoltagePV), func.min(Sample.VoltagePV),
-                              func.avg(Sample.VoltageBattery), func.max(Sample.VoltageBattery), func.min(Sample.VoltageBattery))
+        query = session.query(func.avg(Sample.VoltagePV),
+                              func.max(Sample.VoltagePV), func.min(Sample.VoltagePV))
         query = query.filter(Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         pvvoltage = query.first()
 
-        query = session.query(func.avg(Sample.CurrentPV), func.max(Sample.CurrentPV), func.min(Sample.CurrentPV))
+        query = session.query(func.avg(Sample.VoltageBattery),
+                              func.max(Sample.VoltageBattery), func.min(Sample.VoltageBattery))
+        query = query.filter(Sample.VoltageBattery > 0,
+                             Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
+        batteryvoltage = query.first()
+
+        query = session.query(func.avg(Sample.CurrentPV),
+                              func.max(Sample.CurrentPV), func.min(Sample.CurrentPV))
         query = query.filter(Sample.CurrentPV > 0, Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         pvcurrent = query.first()
         if pvcurrent[0] is None:
             pvcurrent = [0, 0, 0]
 
         query = session.query(func.min(Sample.CreatedDate), func.max(Sample.CreatedDate),
-            func.avg(Sample.PowerPV), func.max(Sample.PowerPV), func.min(Sample.PowerPV))
-        query = query.filter(Sample.PowerPV > 0, Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
+                              func.avg(Sample.PowerPV), func.max(Sample.PowerPV), func.min(Sample.PowerPV))
+        query = query.filter(Sample.CurrentPV > 0.1, Sample.PowerPV > 0.1,
+                             Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         pvpower = query.first()
 
         fator = 0
@@ -210,7 +218,7 @@ class SampleService(object):
                     "avg": pvpower[2],
                     "max": pvpower[3],
                     "min": pvpower[4],
-                    "total": pvpower[2]*fator
+                    "total": pvpower[2] * fator
                 },
                 "current": {
                     "avg": pvcurrent[0],
@@ -226,9 +234,9 @@ class SampleService(object):
             },
             "battery": {
                 "voltage": {
-                    "avg": pvvoltage[3],
-                    "max": pvvoltage[4],
-                    "min": pvvoltage[5]
+                    "avg": batteryvoltage[0],
+                    "max": batteryvoltage[1],
+                    "min": batteryvoltage[2]
                 }
             }
         }
@@ -240,13 +248,17 @@ if __name__ == "__main__":
     port = config.get('usb')[0]
     tracer_service = TracerService(serialclient=None, port=port)
 
-    chargeEquipmentService = ChargeEquipmentService(tracer_service=tracer_service, database=database)
-    chargeEquipmentService.database.create()
-    chargeEquipList = chargeEquipmentService.find_by_model('Tracer4210A')
-    chargeEquip = chargeEquipList[0]
+    print tracer_service.read_value('Battery Capacity')
+#    tracer_service.write_value('Battery Capacity', 60)
+#    print tracer_service.read_value('Battery Capacity')
 
-    samplingService = SampleService(tracer_service=tracer_service, database=database)
-    print samplingService.get_sample()
+#    chargeEquipmentService = ChargeEquipmentService(tracer_service=tracer_service, database=database)
+#    chargeEquipmentService.database.create()
+#    chargeEquipList = chargeEquipmentService.find_by_model('Tracer4210A')
+#    chargeEquip = chargeEquipList[0]
+
+#    samplingService = SampleService(tracer_service=tracer_service, database=database)
+#    print samplingService.get_sample()
 #    samplingService.register_statistical(chargeEquip)
 #    samplingService.register(chargeEquip)
 #    while True:

@@ -12,8 +12,10 @@ database = Database.get_instance()
 usb_list = config.get('usb')
 
 delay = 1
-for i in range(1, 55, delay):
+for i in range(0, 10, delay):
+    print i
     for usb in usb_list:
+        print usb
         trancer_serv = TracerService(serialclient=None, port=usb)
         equipment_serv = ChargeEquipmentService(tracer_service=trancer_serv, database=database)
         equipment_list = equipment_serv.find_by_port(usb)
@@ -22,4 +24,5 @@ for i in range(1, 55, delay):
 
         samplingService = SampleService(tracer_service=trancer_serv, database=database)
         samplingService.register(chargeEquip)
-    time.sleep(delay)
+    print 'sleep'
+    time.sleep(5)

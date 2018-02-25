@@ -19,7 +19,7 @@
   "log": {
     "filepath" : "/home/andreleite/.tenergy/ternergy.log",
     "outputfile" : false,
-    "level" : "ERROR",
+    "level" : "INFO",
     "formatter" : "[%(asctime)s %(lineno)d %(levelname)s %(name)s] %(message)s"
   }
 }

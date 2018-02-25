@@ -8,6 +8,7 @@
 <script>
     var url_context = '{{url}}'
 </script>
+
 <div class="card-deck">
     <div class="card text-white bg-secondary">
         <div class="card-header">
@@ -54,8 +55,18 @@
                                     </h4>
                                 </div>
 
-                                <div class="line-info"><br></div>
+                                <div class="line-info">
+                                    <h4 class="card-title">
+                                        <small class="float-left">Produção</small>
+                                        <span class="float-right font-weight-bold">
+                                            <small id="generatedend"></small></span>
+                                    </h4>
+                                </div>
+
                                 <div class="line-info text-center"><h6>Potência</h6></div>
+                                <!--div class="line-info" style="background: #FFF">
+                                  <canvas id="myChart" width="400" height="400"></canvas>
+                                </div-->
                                 <div class="line-info">
                                     <h6 class="card-title">
                                         <small class="float-left">Média</small>
@@ -335,5 +346,6 @@
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>
 {% endblock %}

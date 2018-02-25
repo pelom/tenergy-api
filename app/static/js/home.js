@@ -85,8 +85,37 @@ $(document).ready(function(){
                 $('#ctn_pv').addClass('bg-warning text-dark')
                 $('#pvicon').addClass('fa-sun')
             }
+
+            moment.locale('en-US');
+            $('#generatedend').text(moment(datajson.generated.start).format('HH:mm:ss') + ' às '
+                + moment(datajson.generated.end).format('HH:mm:ss'))
+
+
+//            var ctx = $("#myChart");
+//            var myChart = new Chart(ctx, {
+//            type: 'bar',
+//                data: {
+//                    labels: ["Med", "Max", "Min", "Total"],
+//                    datasets: [{
+//                        label: 'Potência',
+//                        data: [datajson.generated.power.avg,
+//                        datajson.generated.power.max, datajson.generated.power.min, datajson.generated.power.total],
+//                        borderWidth: 1
+//                    }]
+//                },
+//                options: {
+//                    scales: {
+//                        yAxes: [{
+//                            ticks: {
+//                                beginAtZero:true
+//                            }
+//                        }]
+//                    }
+//                }
+//            });
+
         });
     }
-    //get_data()
-    window.setInterval(get_data, 2500);
+    get_data()
+    window.setInterval(get_data, 5000);
 });
