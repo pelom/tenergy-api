@@ -4,7 +4,7 @@ from entity.chargeEquipment import ChargeEquipment
 
 from entity.database import Database
 
-from service.env import config
+from env import config
 
 
 class ChargeEquipmentService(object):

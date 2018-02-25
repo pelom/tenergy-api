@@ -4,7 +4,7 @@ from tracerService import TracerService
 
 from entity.database import Database
 
-from service.env import config
+from env import config
 
 from entity.sample import Sample
 from entity.sampleStatistical import SampleStatistical

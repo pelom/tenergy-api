@@ -6,7 +6,7 @@ from sampleStatistical import SampleStatistical, Base as SampleStatisticalBase
 
 from sqlalchemy.orm import sessionmaker
 
-from service.env import log, config
+from env import log, config
 
 logger = log(__name__)
 
