@@ -4,12 +4,10 @@ from tracerService import TracerService
 
 from entity.database import Database
 
-from env import log, config
+from service.env import config
 
 from entity.sample import Sample
 from entity.sampleStatistical import SampleStatistical
-
-from chargeEquipmentService import ChargeEquipmentService
 
 from sqlalchemy import func, desc
 

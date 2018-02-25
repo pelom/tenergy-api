@@ -1,4 +1,4 @@
-from env import log, config
+from service.env import log, config
 
 from entity.database import Database
 
