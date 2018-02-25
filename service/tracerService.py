@@ -3,7 +3,7 @@ from pyepsolartracer.client import EPsolarTracerClient
 import re
 import datetime
 
-from env import log
+from service.env import log
 
 logger = log(__name__)
 

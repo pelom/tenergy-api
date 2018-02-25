@@ -1,4 +1,4 @@
-from env import datetime_now_tz
+from service.env import datetime_now_tz
 
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Float
 from sqlalchemy.ext.declarative import declarative_base
