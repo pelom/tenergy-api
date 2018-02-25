@@ -39,5 +39,4 @@ def log(class_name):
 
 def datetime_now_tz():
     dat = datetime.datetime.now(tz=pytz.timezone(config.get('timezone')))
-    print dat
     return dat
