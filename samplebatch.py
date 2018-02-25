@@ -1,5 +1,5 @@
 import time
-from service.env import config
+from env import config
 
 from service.chargeEquipmentService import ChargeEquipmentService
 from service.sampleService import SampleService
