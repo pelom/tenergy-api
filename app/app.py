@@ -83,22 +83,24 @@ def device_statistical():
     return jsonify(sample.to_json())
 
 
+@app.route("/device/monitorredirect", methods=['GET'])
+def device_monitorredirect():
+    logger.info('device_monitorredirect()')
+
+    r = requests.get('http://192.168.0.100:5000/device/monitor')
+    return jsonify(r.json())
+s
 @app.route("/device/monitor", methods=['GET'])
 def device_monitor():
     logger.info('device_monitor()')
 
-    r = requests.get('http://192.168.0.100:5000/device/monitor')
-    return jsonify(r.json())
+    charge_port = request.headers.get('charge_port', usb_port)
+    tracer_service = get_instance_tracer(charge_port)
+    sample_service = get_instance_sample(tracer_service)
 
-    # charge_port = request.headers.get('charge_port', usb_port)
-    # tracer_service = get_instance_tracer(charge_port)
-    # sample_service = get_instance_sample(tracer_service)
-    #
-    # sample = sample_service.get_sample()
-    # return jsonify(sample)
+    sample = sample_service.get_sample()
+    return jsonify(sample)
 
-
-    #
     # sample = sample_service.sampling()
     # statistical = sample_service.sample_statistical()
     # rtc = tracer_service.tracer_client.read_rtc()
