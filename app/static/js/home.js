@@ -21,7 +21,7 @@ $(document).ready(function(){
         return status;
     }
     get_data = function() {
-        $.get(url_context + 'device/monitor', function(datajson) {
+        $.get(url_context + 'device/monitorredirect', function(datajson) {
             console.log(datajson)
             data = datajson.sample
             $('#pvvoltage').text(data.pv.voltage)
