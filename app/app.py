@@ -89,7 +89,7 @@ def device_monitorredirect():
 
     r = requests.get('http://192.168.0.100:5000/device/monitor')
     return jsonify(r.json())
-s
+
 @app.route("/device/monitor", methods=['GET'])
 def device_monitor():
     logger.info('device_monitor()')
