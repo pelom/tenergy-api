@@ -9,5 +9,5 @@ setup(
     author='andreleite',
     author_email='pelommedrado@gmail.com',
     description='Epsolar TracerA - Charge Equipment - API',
-    install_requires=['pymodbus', 'pytz', 'Flask', 'six', 'SQLAlchemy']
+    install_requires=['pymodbus', 'pytz', 'Flask', 'six', 'SQLAlchemy', 'requests']
 )

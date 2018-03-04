@@ -1,5 +1,6 @@
 $(document).ready(function(){
-    moment.locale('pt-BR');
+    //moment.locale('pt-BR');
+    moment.locale('en-US');
 
     console.log(url_context)
 
@@ -76,17 +77,17 @@ $(document).ready(function(){
             $('#statusdischarging').text(data.StatusDischarging)
 
             $('#rtc').text(moment(data.CreatedDate).format('LLLL'))
-            $('#pvicon').removeClass('fa-sun fa-moon')
+            $('.pvicon').removeClass('fa-sun fa-moon')
             $('#ctn_pv').removeClass('bg-light text-dark bg-dark text-white')
             if(data.StatusCharge.trim() == '00 No charging') {
                 $('#ctn_pv').addClass('bg-light text-dark')
-                $('#pvicon').addClass('fa-moon')
+                $('.pvicon').addClass('fa-moon')
             } else {
                 $('#ctn_pv').addClass('bg-warning text-dark')
-                $('#pvicon').addClass('fa-sun')
+                $('.pvicon').addClass('fa-sun')
             }
 
-            moment.locale('en-US');
+
             $('#generatedend').text(moment(datajson.generated.start).format('HH:mm:ss') + ' às '
                 + moment(datajson.generated.end).format('HH:mm:ss'))
 
@@ -114,8 +115,185 @@ $(document).ready(function(){
 //                }
 //            });
 
+            $('#headerbatterystatus').text(get_status_battery(data.StatusBattery))
+            $('#headerbatterycharge').text(get_status_charge(data.StatusCharge))
+
+            gaugevolt.set(data.pv.voltage);
+            gaugecurrent.set(data.pv.current);
+            gaugepower.set(data.pv.power);
+            gaugepowertotal.set(datajson.generated.power.total);
+
+            gaugebatteryvolt.set(data.battery.voltage);
+            gaugebatterycurrent.set(data.battery.current);
+            gaugebatterypower.set(data.battery.power);
+            gaugebatterysoc.set(data.BatterySOC);
+            gaugetemperature.set(data.temperature.Battery);
+            gaugeremote.set(data.temperature.RemoteBattery);
         });
     }
     get_data()
     window.setInterval(get_data, 5000);
+
+    var opts = {
+        angle: 0.1, // The span of the gauge arc
+        lineWidth: 0.2, // The line thickness
+        radiusScale: 1, // Relative radius
+        pointer: {
+            length: 0.65, // // Relative to gauge radius
+            strokeWidth: 0.045, // The thickness
+            color: '#FFF' // Fill color
+        },
+        limitMax: false,     // If false, max value increases automatically if value > maxValue
+        limitMin: false,     // If true, the min value of the gauge will be fixed
+        colorStart: '#6FADCF',   // Colors
+        colorStop: '#8FC0DA',    // just experiment with them
+        strokeColor: '#E0E0E0',  // to see which ones work best for you
+        generateGradient: true,
+        highDpiSupport: true,     // High resolution support
+        percentColors: [[0.0, "#ff0000" ], [0.50, "#f9c802"], [1.0, "#a9d70b"]],
+
+        renderTicks: {
+          divisions: 5,
+          divWidth: 1.1,
+          divLength: 0.7,
+          divColor: "#333333",
+          subDivisions: 3,
+          subLength: 0.5,
+          subWidth: 0.6,
+          subColor: "#666666"
+        },
+
+//        staticZones: [
+//           {strokeStyle: "#F03E3E", min: 0, max: 15  }, // Red from 100 to 130
+//           {strokeStyle: "#FFDD00", min: 15, max: 30 }, // Yellow
+//           {strokeStyle: "#30B32D", min: 30, max: 50 }, // Green
+//        ],
+
+//        staticLabels: {
+//          font: "8px sans-serif",  // Specifies font
+//          labels: [0, 15, 30, 5],  // Print labels at these values
+//          color: "#000000",  // Optional: Label text color
+//          fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+//        },
+    };
+
+//    var target = document.getElementById('canvas-preview'); // your canvas element
+//    var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+//    gauge.setTextField(document.getElementById("preview-textfield"));
+
+    var CustomTextRenderer = function(el) {
+        this.el = el;
+        this.render = function(gauge) {
+            this.el.innerHTML = gauge.displayedValue.toFixed(2);
+        }
+    }
+    CustomTextRenderer.prototype = new TextRenderer();
+
+    var gaugevolt = new Gauge(document.getElementById("canvas-volt"));
+    opts.staticZones= [
+       {strokeStyle: "#F03E3E", min: 0, max: 15  },
+       {strokeStyle: "#FFDD00", min: 15, max: 30 },
+       {strokeStyle: "#30B32D", min: 30, max: 50 },
+    ];
+    gaugevolt.setOptions(opts);
+    gaugevolt.setTextField(new CustomTextRenderer(document.getElementById("volt-textfield")))
+    gaugevolt.maxValue = 50.0;
+    gaugevolt.setMinValue(0.0);
+    gaugevolt.animationSpeed = 32;
+
+    opts.staticZones = [
+       {strokeStyle: "#30B32D", min: 0, max: 5  }, // Red from 100 to 130
+       {strokeStyle: "#FFDD00", min: 5, max: 15 }, // Yellow
+       {strokeStyle: "#F03E3E", min: 15, max: 40 }, // Green
+    ];
+    var gaugecurrent = new Gauge(document.getElementById("canvas-current"));
+    gaugecurrent.setOptions(opts);
+    gaugecurrent.setTextField(new CustomTextRenderer(document.getElementById("current-textfield")))
+    gaugecurrent.maxValue = 40.0;
+    gaugecurrent.setMinValue(0.0);
+    gaugecurrent.animationSpeed = 32;
+
+    opts.staticZones = undefined;
+    var gaugepower = new Gauge(document.getElementById("canvas-power"));
+    gaugepower.setOptions(opts);
+    gaugepower.setTextField(new CustomTextRenderer(document.getElementById("power-textfield")))
+    gaugepower.maxValue = 1000.0;
+    gaugepower.setMinValue(0.0);
+    gaugepower.animationSpeed = 32;
+
+    opts.staticZones = undefined;
+    var gaugepowertotal = new Gauge(document.getElementById("canvas-powertotal"));
+    gaugepowertotal.setOptions(opts);
+    gaugepowertotal.setTextField(new CustomTextRenderer(document.getElementById("powertotal-textfield")))
+    gaugepowertotal.maxValue = 5000.0;
+    gaugepowertotal.setMinValue(0.0);
+    gaugepowertotal.animationSpeed = 32;
+
+    opts.staticZones = [
+       {strokeStyle: "#F03E3E", min: 0, max: 12  }, // Red from 100 to 130
+       {strokeStyle: "#FFDD00", min: 12, max: 24 }, // Yellow
+       {strokeStyle: "#30B32D", min: 24, max: 36 }, // Green
+    ];
+    var gaugebatteryvolt = new Gauge(document.getElementById("canvas-batteryvolt"));
+    gaugebatteryvolt.setOptions(opts);
+    gaugebatteryvolt.setTextField(new CustomTextRenderer(document.getElementById("batteryvolt-textfield")))
+    gaugebatteryvolt.maxValue = 36.0;
+    gaugebatteryvolt.setMinValue(0.0);
+    gaugebatteryvolt.animationSpeed = 32;
+
+    opts.staticZones = [
+       {strokeStyle: "#30B32D", min: 0, max: 5  }, // Red from 100 to 130
+       {strokeStyle: "#FFDD00", min: 5, max: 15 }, // Yellow
+       {strokeStyle: "#F03E3E", min: 15, max: 40 }, // Green
+    ];
+    var gaugebatterycurrent = new Gauge(document.getElementById("canvas-batterycurrent"));
+    gaugebatterycurrent.setOptions(opts);
+    gaugebatterycurrent.setTextField(new CustomTextRenderer(document.getElementById("batterycurrent-textfield")))
+    gaugebatterycurrent.maxValue = 40.0;
+    gaugebatterycurrent.setMinValue(0.0);
+    gaugebatterycurrent.animationSpeed = 32;
+
+    opts.staticZones = undefined;
+    var gaugebatterypower = new Gauge(document.getElementById("canvas-batterypower"));
+    gaugebatterypower.setOptions(opts);
+    gaugebatterypower.setTextField(new CustomTextRenderer(document.getElementById("batterypower-textfield")))
+    gaugebatterypower.maxValue = 1000.0;
+    gaugebatterypower.setMinValue(0.0);
+    gaugebatterypower.animationSpeed = 32;
+
+    opts.staticZones = [
+       {strokeStyle: "#F03E3E", min: 0, max: 33  }, // Red from 100 to 130
+       {strokeStyle: "#FFDD00", min: 33, max: 66 }, // Yellow
+       {strokeStyle: "#30B32D", min: 66, max: 100 }, // Green
+    ];
+    var gaugebatterysoc = new Gauge(document.getElementById("canvas-batterysoc"));
+    gaugebatterysoc.setOptions(opts);
+    gaugebatterysoc.setTextField(document.getElementById("batterysoc-textfield"))
+    gaugebatterysoc.maxValue = 100.0;
+    gaugebatterysoc.setMinValue(0.0);
+    gaugebatterysoc.animationSpeed = 32;
+
+    opts.staticZones = [
+       {strokeStyle: "#30B32D", min: 0, max: 25  }, // Red from 100 to 130
+       {strokeStyle: "#FFDD00", min: 25, max: 35 }, // Yellow
+       {strokeStyle: "#F03E3E", min: 35, max: 60 }, // Green
+    ];
+    var gaugetemperature = new Gauge(document.getElementById("canvas-temperature"));
+    gaugetemperature.setOptions(opts);
+    gaugetemperature.setTextField(document.getElementById("temperature-textfield"))
+    gaugetemperature.maxValue = 60.0;
+    gaugetemperature.setMinValue(0.0);
+    gaugetemperature.animationSpeed = 32;
+
+    opts.staticZones = [
+       {strokeStyle: "#30B32D", min: 0, max: 25  }, // Red from 100 to 130
+       {strokeStyle: "#FFDD00", min: 25, max: 35 }, // Yellow
+       {strokeStyle: "#F03E3E", min: 35, max: 60 }, // Green
+    ];
+    var gaugeremote = new Gauge(document.getElementById("canvas-remote"));
+    gaugeremote.setOptions(opts);
+    gaugeremote.setTextField(document.getElementById("remote-textfield"))
+    gaugeremote.maxValue = 60.0;
+    gaugeremote.setMinValue(0.0);
+    gaugeremote.animationSpeed = 32;
 });

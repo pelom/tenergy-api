@@ -13,3 +13,26 @@ body {
     padding-right: 0px !important;
     padding-left: 0px !important;
 }
+
+.t-title-header {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.125);
+    /*text-align: center;*/
+}
+.t-name-header {
+    font-size: 14px;
+    text-align: center;
+}
+.t-value-header {
+    font-size: 24px;
+    text-align: center;
+    font-weight: bold;
+}
+.t-row {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.125);
+}
+.t-col {
+    margin-top: 1rem;
+}

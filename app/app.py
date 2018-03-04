@@ -1,3 +1,5 @@
+import requests
+
 from env import log, config
 
 from entity.database import Database
@@ -85,12 +87,17 @@ def device_statistical():
 def device_monitor():
     logger.info('device_monitor()')
 
-    charge_port = request.headers.get('charge_port', usb_port)
-    tracer_service = get_instance_tracer(charge_port)
-    sample_service = get_instance_sample(tracer_service)
+    r = requests.get('http://192.168.0.100:5000/device/monitor')
+    return jsonify(r.json())
 
-    sample = sample_service.get_sample()
-    return jsonify(sample)
+    # charge_port = request.headers.get('charge_port', usb_port)
+    # tracer_service = get_instance_tracer(charge_port)
+    # sample_service = get_instance_sample(tracer_service)
+    #
+    # sample = sample_service.get_sample()
+    # return jsonify(sample)
+
+
     #
     # sample = sample_service.sampling()
     # statistical = sample_service.sample_statistical()
