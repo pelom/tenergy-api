@@ -204,7 +204,7 @@ class SampleService(object):
             diff_time = pvpower[1] - pvpower[0]
             hour = diff_time.seconds // 3600
             minute = (diff_time.seconds // 60) % 60
-            //fator = float(hour + (minute / float(60)))
+            #fator = float(hour + (minute / float(60)))
 
         return {
             "sample": sample.to_json(),
