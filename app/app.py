@@ -105,7 +105,7 @@ def device_monitor():
     sample_service = get_instance_sample(tracer_service)
 
     param_date = request.headers.get('date', None)
-    now = datetime.datetime.now()
+    now = datetime.now()
     if(param_date is not None):
         now = datetime.strptime(param_date, '%Y-%m-%d')
 
