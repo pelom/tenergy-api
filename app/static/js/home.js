@@ -1,6 +1,6 @@
 $(document).ready(function(){
-    //moment.locale('pt-BR');
-    moment.locale('en-US');
+    moment.locale('pt-BR');
+    //moment.locale('en-US');
 
     console.log(url_context)
 
@@ -24,9 +24,10 @@ $(document).ready(function(){
         $.get(url_context + 'device/monitorredirect', function(datajson) {
             console.log(datajson)
             data = datajson.sample
-            $('#pvvoltage').text(data.pv.voltage)
-            $('#pvcurrent').text(data.pv.current)
-            $('#pvpower').text(data.pv.power)
+
+//            $('#pvvoltage').text(data.pv.voltage)
+//            $('#pvcurrent').text(data.pv.current)
+//            $('#pvpower').text(data.pv.power)
 
             //$('#pvvoltagemax').text(data.statistical.VoltageMaxPV)
             //$('#pvvoltagemin').text(data.statistical.VoltageMinPV)
@@ -34,7 +35,7 @@ $(document).ready(function(){
             $('#pvpoweravg').text(datajson.generated.power.avg.toFixed(2))
             $('#pvpowermax').text(datajson.generated.power.max)
             $('#pvpowermin').text(datajson.generated.power.min)
-            $('#pvpowertotal').text(datajson.generated.power.total.toFixed(2))
+            //$('#pvpowertotal').text(datajson.generated.power.total.toFixed(2))
 
             $('#pvvoltageavg').text(datajson.generated.voltage.avg.toFixed(2))
             $('#pvvoltagemax').text(datajson.generated.voltage.max)
@@ -47,9 +48,9 @@ $(document).ready(function(){
 
             //$('#generatedenergy').text(data.statistical.GeneratedEnergy)
 
-            $('#batteryvoltage').text(data.battery.voltage)
-            $('#batterycurrent').text(data.battery.current)
-            $('#batterypower').text(data.battery.power)
+//            $('#batteryvoltage').text(data.battery.voltage)
+//            $('#batterycurrent').text(data.battery.current)
+//            $('#batterypower').text(data.battery.power)
 
             $('#batterysoc').width( data.BatterySOC +'%');
             $('#batterysocvalue').text(data.BatterySOC + '%')
@@ -66,9 +67,9 @@ $(document).ready(function(){
             $('#batteryvoltagemax').text(datajson.battery.voltage.max)
             $('#batteryvoltagemin').text(datajson.battery.voltage.min)
 
-            $('#dischargingvoltage').text(data.discharging.voltage)
-            $('#dischargingcurrent').text(data.discharging.current)
-            $('#dischargingpower').text(data.discharging.power)
+//            $('#dischargingvoltage').text(data.discharging.voltage)
+//            $('#dischargingcurrent').text(data.discharging.current)
+//            $('#dischargingpower').text(data.discharging.power)
             //$('#consumedenergy').text(data.statistical.ConsumedEnergy)
 
             $('#systemvoltage').text(data.VoltageSystemBattery)
@@ -87,9 +88,11 @@ $(document).ready(function(){
                 $('.pvicon').addClass('fa-sun')
             }
 
+            $('#headerstartdate').text(moment(datajson.generated.start).format('HH:mm'));
+            $('#headerenddate').text(moment(datajson.generated.end).format('HH:mm'));
 
-            $('#generatedend').text(moment(datajson.generated.start).format('HH:mm:ss') + ' às '
-                + moment(datajson.generated.end).format('HH:mm:ss'))
+//            $('#generatedend').text(moment(datajson.generated.start).format('HH:mm:ss') + ' às '
+//                + moment(datajson.generated.end).format('HH:mm:ss'))
 
 
 //            var ctx = $("#myChart");
@@ -129,18 +132,22 @@ $(document).ready(function(){
             gaugebatterysoc.set(data.BatterySOC);
             gaugetemperature.set(data.temperature.Battery);
             gaugeremote.set(data.temperature.RemoteBattery);
+
+            gaugedischargingvolt.set(data.discharging.voltage);
+            gaugedischargingcurrent.set(data.discharging.current);
+            gaugedischargingpower.set(data.discharging.power);
         });
     }
     get_data()
     window.setInterval(get_data, 5000);
 
     var opts = {
-        angle: 0.1, // The span of the gauge arc
+        angle: -0.1, // The span of the gauge arc
         lineWidth: 0.2, // The line thickness
         radiusScale: 1, // Relative radius
         pointer: {
             length: 0.65, // // Relative to gauge radius
-            strokeWidth: 0.045, // The thickness
+            strokeWidth: 0.055, // The thickness
             color: '#FFF' // Fill color
         },
         limitMax: false,     // If false, max value increases automatically if value > maxValue
@@ -192,12 +199,12 @@ $(document).ready(function(){
     var gaugevolt = new Gauge(document.getElementById("canvas-volt"));
     opts.staticZones= [
        {strokeStyle: "#F03E3E", min: 0, max: 15  },
-       {strokeStyle: "#FFDD00", min: 15, max: 30 },
-       {strokeStyle: "#30B32D", min: 30, max: 50 },
+       {strokeStyle: "#FFDD00", min: 15, max: 24 },
+       {strokeStyle: "#30B32D", min: 24, max: 100 },
     ];
     gaugevolt.setOptions(opts);
     gaugevolt.setTextField(new CustomTextRenderer(document.getElementById("volt-textfield")))
-    gaugevolt.maxValue = 50.0;
+    gaugevolt.maxValue = 100.0;
     gaugevolt.setMinValue(0.0);
     gaugevolt.animationSpeed = 32;
 
@@ -230,15 +237,16 @@ $(document).ready(function(){
     gaugepowertotal.animationSpeed = 32;
 
     opts.staticZones = [
-       {strokeStyle: "#F03E3E", min: 0, max: 12  }, // Red from 100 to 130
-       {strokeStyle: "#FFDD00", min: 12, max: 24 }, // Yellow
-       {strokeStyle: "#30B32D", min: 24, max: 36 }, // Green
+       {strokeStyle: "#F03E3E", min: 9, max: 21.2  }, // Red from 100 to 130
+       {strokeStyle: "#FFDD00", min: 21.2, max: 25.2 }, // Yellow
+       {strokeStyle: "#30B32D", min: 25.2, max: 30 }, // Green
+       {strokeStyle: "#F03E3E", min: 30, max: 36 }, // Green
     ];
     var gaugebatteryvolt = new Gauge(document.getElementById("canvas-batteryvolt"));
     gaugebatteryvolt.setOptions(opts);
     gaugebatteryvolt.setTextField(new CustomTextRenderer(document.getElementById("batteryvolt-textfield")))
     gaugebatteryvolt.maxValue = 36.0;
-    gaugebatteryvolt.setMinValue(0.0);
+    gaugebatteryvolt.setMinValue(9);
     gaugebatteryvolt.animationSpeed = 32;
 
     opts.staticZones = [
@@ -274,9 +282,9 @@ $(document).ready(function(){
     gaugebatterysoc.animationSpeed = 32;
 
     opts.staticZones = [
-       {strokeStyle: "#30B32D", min: 0, max: 25  }, // Red from 100 to 130
-       {strokeStyle: "#FFDD00", min: 25, max: 35 }, // Yellow
-       {strokeStyle: "#F03E3E", min: 35, max: 60 }, // Green
+       { strokeStyle: "#EEEEE", min: 0, max: 25  }, // Red from 100 to 130
+       { strokeStyle: "#FFDD00", min: 25, max: 45 }, // Yellow
+       { strokeStyle: "#F03E3E", min: 45, max: 60 }, // Green
     ];
     var gaugetemperature = new Gauge(document.getElementById("canvas-temperature"));
     gaugetemperature.setOptions(opts);
@@ -286,9 +294,9 @@ $(document).ready(function(){
     gaugetemperature.animationSpeed = 32;
 
     opts.staticZones = [
-       {strokeStyle: "#30B32D", min: 0, max: 25  }, // Red from 100 to 130
-       {strokeStyle: "#FFDD00", min: 25, max: 35 }, // Yellow
-       {strokeStyle: "#F03E3E", min: 35, max: 60 }, // Green
+       { strokeStyle: "#EEEEE", min: 0, max: 25  }, // Red from 100 to 130
+       { strokeStyle: "#FFDD00", min: 25, max: 45 }, // Yellow
+       { strokeStyle: "#F03E3E", min: 45, max: 60 }, // Green
     ];
     var gaugeremote = new Gauge(document.getElementById("canvas-remote"));
     gaugeremote.setOptions(opts);
@@ -296,4 +304,38 @@ $(document).ready(function(){
     gaugeremote.maxValue = 60.0;
     gaugeremote.setMinValue(0.0);
     gaugeremote.animationSpeed = 32;
+
+
+    var gaugedischargingvolt = new Gauge(document.getElementById("canvas-dischargingvolt"));
+   opts.staticZones = [
+       {strokeStyle: "#F03E3E", min: 9, max: 21.2  }, // Red from 100 to 130
+       {strokeStyle: "#FFDD00", min: 21.2, max: 25.2 }, // Yellow
+       {strokeStyle: "#30B32D", min: 25.2, max: 30 }, // Green
+       {strokeStyle: "#F03E3E", min: 30, max: 36 }, // Green
+    ];
+    gaugedischargingvolt.setOptions(opts);
+    gaugedischargingvolt.setTextField(new CustomTextRenderer(document.getElementById("dischargingvolt-textfield")))
+    gaugedischargingvolt.maxValue = 36.0;
+    gaugedischargingvolt.setMinValue(9.0);
+    gaugedischargingvolt.animationSpeed = 32;
+
+    opts.staticZones = [
+       {strokeStyle: "#30B32D", min: 0, max: 5  }, // Red from 100 to 130
+       {strokeStyle: "#FFDD00", min: 5, max: 15 }, // Yellow
+       {strokeStyle: "#F03E3E", min: 15, max: 40 }, // Green
+    ];
+    var gaugedischargingcurrent = new Gauge(document.getElementById("canvas-dischargingcurrent"));
+    gaugedischargingcurrent.setOptions(opts);
+    gaugedischargingcurrent.setTextField(new CustomTextRenderer(document.getElementById("dischargingcurrent-textfield")))
+    gaugedischargingcurrent.maxValue = 40.0;
+    gaugedischargingcurrent.setMinValue(0.0);
+    gaugedischargingcurrent.animationSpeed = 32;
+
+    opts.staticZones = undefined;
+    var gaugedischargingpower = new Gauge(document.getElementById("canvas-dischargingpower"));
+    gaugedischargingpower.setOptions(opts);
+    gaugedischargingpower.setTextField(new CustomTextRenderer(document.getElementById("dischargingpower-textfield")))
+    gaugedischargingpower.maxValue = 1000.0;
+    gaugedischargingpower.setMinValue(0.0);
+    gaugedischargingpower.animationSpeed = 32;
 });

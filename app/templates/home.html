@@ -2,24 +2,26 @@
 
 {% block content %}
 
-{{url_context}}
-{{ip}}
-{{url}}
 <script>
     var url_context = '{{url}}'
 </script>
-
-
 
 <div class="card-deck">
     <div class="card text-white bg-dark">
         <div class="card-header">
             <h5 class="my-0 font-weight-normal"><i class="fas fa-mobile"></i> Tracer 4210A
-                <small id="rtc" class="float-right"><i class="far fa-clock"></i></small>
+                <div class="float-right">
+                    <i class="far fa-calendar-alt"></i>
+                    <small id="rtc" ></small>
+                </div>
             </h5>
         </div>
         <div class="card-footer">
-            <h5 class="t-title-header"><i class="fas fa-moon pvicon"></i> PAINEL FOTOVOLTÁICO</h5>
+            <h6 class="t-title-header"><i class="fas fa-moon pvicon"></i> PAINEL FOTOVOLTÁICO
+                <div class="float-right">
+                    <small id="headerstartdate" class="badge badge-warning"></small>
+                    <small id="headerenddate" class="badge badge-warning"></small></div>
+            </h6>
             <div class="row t-row">
                 <div class="col-md-3 t-col">
                     <div class="t-name-header">Tensão</div>
@@ -40,16 +42,16 @@
                         <span id="power-textfield">0.0</span> <small>W</small></div>
                 </div>
                 <div class="col-md-3 t-col">
-                    <div class="t-name-header">Potência Total</div>
+                    <div class="t-name-header">Potência Gerada</div>
                     <canvas style="width: 100%" height="50" id="canvas-powertotal"></canvas>
                     <div class="t-value-header">
                         <span id="powertotal-textfield">0.0</span> <small>Wh</small></div>
                 </div>
             </div>
 
-            <h5 class="t-title-header"><i class="fas fa-battery-full"></i> BATERIA
+            <h6 class="t-title-header"><i class="fas fa-battery-full"></i> BATERIA
                 <small id="headerbatterystatus" class="badge badge-primary"></small>
-                <small id="headerbatterycharge" class="badge badge-info"></small></h5>
+                <small id="headerbatterycharge" class="badge badge-info"></small></h6>
             <div class="row t-row">
                 <div class="col-md-3 t-col">
                     <div class="t-name-header">Tensão</div>
@@ -89,6 +91,39 @@
                 </div>
             </div>
 
+            <h6 class="t-title-header"><i class="fas fa-lightbulb"></i> SAÍDA</h6>
+            <div class="row t-row">
+                <div class="col-md-3 t-col">
+                    <div class="t-name-header">Tensão</div>
+                    <canvas style="width: 100%" height="50" id="canvas-dischargingvolt"></canvas>
+                    <div class="t-value-header">
+                        <span id="dischargingvolt-textfield">0.0</span> <small>V</small></div>
+                </div>
+                <div class="col-md-3 t-col">
+                    <div class="t-name-header">Corrente</div>
+                    <canvas style="width: 100%" height="50" id="canvas-dischargingcurrent"></canvas>
+                    <div class="t-value-header">
+                        <span id="dischargingcurrent-textfield">0.0</span> <small>A</small></div>
+                </div>
+                <div class="col-md-3 t-col">
+                    <div class="t-name-header">Potência</div>
+                    <canvas style="width: 100%" height="50" id="canvas-dischargingpower"></canvas>
+                    <div class="t-value-header">
+                        <span id="dischargingpower-textfield">0.0</span> <small>W</small></div>
+                </div>
+                <div class="col-md-3 t-col">
+                    <div class="t-name-header">Potência Consumida</div>
+                    <canvas style="width: 100%" height="50" id="canvas-dischargingpowertotal"></canvas>
+                    <div class="t-value-header">
+                        <span id="dischargingpowertotal-textfield">0.0</span> <small>Wh</small></div>
+                </div>
+                <!--div class="col-md-3 t-col">
+                    <div class="t-name-header">Potência Gerada</div>
+                    <canvas style="width: 100%" height="50" id="canvas-powertotal"></canvas>
+                    <div class="t-value-header">
+                        <span id="powertotal-textfield">0.0</span> <small>Wh</small></div>
+                </div-->
+            </div>
             <div class="card-deck">
                 <div class="row mb-3">
                     <div class="col-lg-4 mb-4 col-md-12 col-info">
@@ -97,7 +132,7 @@
                                 <h4 class="my-0"><i class="fas fa-moon pvicon"></i> Painel</h4>
                             </div>
                             <div class="card-body">
-                                <div class="line-info">
+                                <!--div class="line-info">
                                     <h4 class="card-title">
                                         <small class="float-left">Tensão</small>
                                         <span class="float-right">
@@ -125,15 +160,15 @@
                                         <span class="float-right font-weight-bold">
                                             <strong id="generatedenergy"></strong> <small>kWh</small></span>
                                     </h4>
-                                </div>
+                                </div-->
 
-                                <div class="line-info">
+                                <!--div class="line-info">
                                     <h4 class="card-title">
                                         <small class="float-left">Produção</small>
                                         <span class="float-right font-weight-bold">
                                             <small id="generatedend"></small></span>
                                     </h4>
-                                </div>
+                                </div-->
 
                                 <div class="line-info text-center"><h6>Potência</h6></div>
                                 <!--div class="line-info" style="background: #FFF">
@@ -160,13 +195,13 @@
                                             <strong id="pvpowermin"></strong> <small>W</small></span>
                                     </h6>
                                 </div>
-                                <div class="line-info">
+                                <!--div class="line-info">
                                     <h4 class="card-title">
                                         <small class="float-left">Total</small>
                                         <span class="float-right font-weight-bold">
                                             <strong id="pvpowertotal"></strong> <small>Wh</small></span>
                                     </h4>
-                                </div>
+                                </div-->
                                 <div class="line-info text-center"><h6>Tensão</h6></div>
                                 <div class="line-info">
                                     <h6 class="card-title">
@@ -228,7 +263,7 @@
                                 <h4 class="my-0 font-weight-normal"><i class="fas fa-battery-full"></i> Bateria</h4>
                             </div>
                             <div class="card-body">
-                                <div class="line-info">
+                                <!--div class="line-info">
                                     <h4 class="card-title">
                                         <small class="float-left">Tensão</small>
                                         <span class="float-right font-weight-bold">
@@ -290,7 +325,7 @@
                                             <strong id="batterytemperatureremote"></strong> <small>ºC</small></span>
                                     </h4>
                                 </div>
-                                <div class="line-info"><br></div>
+                                <div class="line-info"><br></div-->
                                 <div class="line-info text-center"><h6>Tensão</h6></div>
                                 <div class="line-info">
                                     <h6 class="card-title">
@@ -313,7 +348,7 @@
                     <div class=" col-info col-lg-4 mb-4 col-md-12">
                         <div class="card text-white bg-primary">
                             <div class="card-header">
-                                <h4 class="my-0 font-weight-normal"><i class="fas fa-bolt"></i> Inversor</h4>
+                                <h4 class="my-0 font-weight-normal"><i class="fas fa-bolt"></i> Saída</h4>
                             </div>
                             <div class="card-body">
                                 <div class="line-info">

@@ -36,3 +36,6 @@ body {
 .t-col {
     margin-top: 1rem;
 }
+small {
+    font-size: 70% !important;
+}
