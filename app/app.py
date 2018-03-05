@@ -109,7 +109,7 @@ def device_monitor():
     if(param_date is not None):
         now = datetime.strptime(param_date, '%Y-%m-%d')
 
-    sample = sample_service.get_sample(now)
+    sample = sample_service.get_sample(now=now)
     return jsonify(sample)
 
     # sample = sample_service.sampling()
