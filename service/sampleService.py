@@ -208,8 +208,8 @@ class SampleService(object):
         return {
             "sample": sample.to_json(),
             "generated": {
-                "start": None if self.pvpower[0] is None else self.pvpower[0].isoformat(),
-                "end": None if self.pvpower[1] is None else self.pvpower[1].isoformat(),
+                "start": None if not pvpower[0] else pvpower[0].isoformat(),
+                "end": None if not pvpower[1] else pvpower[1].isoformat(),
                 "hour": hour,
                 "minute": minute,
                 "power": {
