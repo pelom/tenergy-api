@@ -158,8 +158,9 @@ class SampleService(object):
         value_fields['AmbientTemp'] = 'Ambient Temp.'
         return value_fields
 
-    def get_sample(self):
-        now = datetime.datetime.now()
+    def get_sample(self, now=datetime.datetime.now()):
+        print 'now', now
+
         start_date = datetime.datetime(now.year, now.month, now.day, 0, 0, 0)
         end_date = datetime.datetime(now.year, now.month, now.day, 23, 59, 59)
 

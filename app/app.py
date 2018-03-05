@@ -1,5 +1,7 @@
 import requests
 
+from datetime import datetime
+
 from env import log, config
 
 from entity.database import Database
@@ -87,7 +89,11 @@ def device_statistical():
 def device_monitorredirect():
     logger.info('device_monitorredirect()')
 
-    r = requests.get('http://192.168.0.100:5000/device/monitor')
+    params = {'date': '2018-03-04'}
+
+    r = requests.get(
+        url='http://192.168.0.100:5000/device/monitor',
+        params=params)
     return jsonify(r.json())
 
 @app.route("/device/monitor", methods=['GET'])
@@ -98,7 +104,12 @@ def device_monitor():
     tracer_service = get_instance_tracer(charge_port)
     sample_service = get_instance_sample(tracer_service)
 
-    sample = sample_service.get_sample()
+    param_date = request.headers.get('date', None)
+    now = datetime.datetime.now()
+    if(param_date is not None):
+        now = datetime.strptime(param_date, '%Y-%m-%d')
+
+    sample = sample_service.get_sample(now)
     return jsonify(sample)
 
     # sample = sample_service.sampling()
