@@ -190,7 +190,9 @@ class SampleService(object):
 
         query = session.query(func.min(Sample.CreatedDate), func.max(Sample.CreatedDate),
                               func.avg(Sample.PowerPV), func.max(Sample.PowerPV), func.min(Sample.PowerPV),
-                              func.avg(Sample.CurrentPV), func.max(Sample.CurrentPV), func.min(Sample.CurrentPV))
+                              func.avg(Sample.CurrentPV), func.max(Sample.CurrentPV), func.min(Sample.CurrentPV),
+                              func.avg(Sample.VoltagePV), func.max(Sample.VoltagePV), func.min(Sample.VoltagePV)
+                              )
 
         query = query.filter(Sample.CurrentPV >= 0.01,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
@@ -228,9 +230,9 @@ class SampleService(object):
                     "total": pvpower[5] * hour
                 },
                 "voltage": {
-                    "avg": pvvoltage[0],
-                    "max": pvvoltage[1],
-                    "min": pvvoltage[2]
+                    "avg": pvpower[8],
+                    "max": pvpower[9],
+                    "min": pvpower[10]
                 }
             },
             "battery": {
