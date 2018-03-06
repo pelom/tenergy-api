@@ -181,16 +181,18 @@ class SampleService(object):
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         batteryvoltage = query.first()
 
-        query = session.query(func.avg(Sample.CurrentPV),
-                              func.max(Sample.CurrentPV), func.min(Sample.CurrentPV))
-        query = query.filter(Sample.CurrentPV > 0, Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
-        pvcurrent = query.first()
-        if pvcurrent[0] is None:
-            pvcurrent = [0, 0, 0]
+        # query = session.query(func.min(Sample.CreatedDate), func.max(Sample.CreatedDate),
+        #                        func.avg(Sample.CurrentPV), func.max(Sample.CurrentPV), func.min(Sample.CurrentPV))
+        # query = query.filter(Sample.CurrentPV > 0, Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
+        # pvcurrent = query.first()
+        # if pvcurrent[0] is None:
+        #     pvcurrent = ['', '', 0, 0, 0]
 
         query = session.query(func.min(Sample.CreatedDate), func.max(Sample.CreatedDate),
-                              func.avg(Sample.PowerPV), func.max(Sample.PowerPV), func.min(Sample.PowerPV))
-        query = query.filter(Sample.CurrentPV > 0.2, Sample.PowerPV > 0.5,
+                              func.avg(Sample.PowerPV), func.max(Sample.PowerPV), func.min(Sample.PowerPV),
+                              func.avg(Sample.CurrentPV), func.max(Sample.CurrentPV), func.min(Sample.CurrentPV))
+
+        query = query.filter(Sample.CurrentPV > 0, Sample.PowerPV > 0,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         pvpower = query.first()
 
@@ -220,10 +222,10 @@ class SampleService(object):
                     "total": pvpower[2] * fator
                 },
                 "current": {
-                    "avg": pvcurrent[0],
-                    "max": pvcurrent[1],
-                    "min": pvcurrent[2],
-                    "total": pvcurrent[0] * fator
+                    "avg": pvpower[5],
+                    "max": pvpower[6],
+                    "min": pvpower[7],
+                    "total": pvpower[0] * fator
                 },
                 "voltage": {
                     "avg": pvvoltage[0],
