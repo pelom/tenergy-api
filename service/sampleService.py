@@ -225,7 +225,7 @@ class SampleService(object):
                     "avg": pvpower[5],
                     "max": pvpower[6],
                     "min": pvpower[7],
-                    "total": pvpower[0] * fator
+                    "total": pvpower[5] * fator
                 },
                 "voltage": {
                     "avg": pvvoltage[0],
