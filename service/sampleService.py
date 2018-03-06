@@ -170,13 +170,15 @@ class SampleService(object):
         query = query.limit(1)
         sample = query.first()
 
-        query = session.query(func.avg(Sample.VoltagePV),
-                              func.max(Sample.VoltagePV), func.min(Sample.VoltagePV))
-        query = query.filter(Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
-        pvvoltage = query.first()
+        # query = session.query(func.avg(Sample.VoltagePV),
+        #                       func.max(Sample.VoltagePV), func.min(Sample.VoltagePV))
+        # query = query.filter(Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
+        # pvvoltage = query.first()
 
-        query = session.query(func.avg(Sample.VoltageBattery),
-                              func.max(Sample.VoltageBattery), func.min(Sample.VoltageBattery))
+        query = session.query(
+            func.avg(Sample.PowerBattery), func.max(Sample.PowerBattery), func.min(Sample.PowerBattery),
+            func.avg(Sample.CurrentBattery), func.max(Sample.CurrentBattery), func.min(Sample.CurrentBattery),
+            func.avg(Sample.VoltageBattery), func.max(Sample.VoltageBattery), func.min(Sample.VoltageBattery))
         query = query.filter(Sample.VoltageBattery > 0,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         batteryvoltage = query.first()
@@ -236,10 +238,20 @@ class SampleService(object):
                 }
             },
             "battery": {
+                "power": {
+                    "avg": pvpower[0],
+                    "max": pvpower[1],
+                    "min": pvpower[2],
+                },
+                "current": {
+                    "avg": pvpower[3],
+                    "max": pvpower[4],
+                    "min": pvpower[5],
+                },
                 "voltage": {
-                    "avg": batteryvoltage[0],
-                    "max": batteryvoltage[1],
-                    "min": batteryvoltage[2]
+                    "avg": batteryvoltage[6],
+                    "max": batteryvoltage[7],
+                    "min": batteryvoltage[8]
                 }
             }
         }
