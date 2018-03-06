@@ -64,8 +64,17 @@ $(document).ready(function(){
             //$('#batteryvoltagemax').text(data.statistical.VoltageMaxBattery)
             //$('#batteryvoltagemin').text(data.statistical.VoltageMinBattery)
 
+            $('#batterypoweravg').text(datajson.battery.power.avg.toFixed(2))
+            $('#batterypowermax').text(datajson.battery.power.max)
+            $('#batterypowermin').text(datajson.battery.power.min)
+
+            $('#batteryvoltageavg').text(datajson.battery.voltage.avg.toFixed(2))
             $('#batteryvoltagemax').text(datajson.battery.voltage.max)
             $('#batteryvoltagemin').text(datajson.battery.voltage.min)
+
+            $('#batterycurrentavg').text(datajson.battery.current.avg.toFixed(2))
+            $('#batterycurrentmax').text(datajson.battery.current.max)
+            $('#batterycurrentmin').text(datajson.battery.current.min)
 
 //            $('#dischargingvoltage').text(data.discharging.voltage)
 //            $('#dischargingcurrent').text(data.discharging.current)
@@ -224,7 +233,7 @@ $(document).ready(function(){
     var gaugepower = new Gauge(document.getElementById("canvas-power"));
     gaugepower.setOptions(opts);
     gaugepower.setTextField(new CustomTextRenderer(document.getElementById("power-textfield")))
-    gaugepower.maxValue = 1000.0;
+    gaugepower.maxValue = 1040.0;
     gaugepower.setMinValue(0.0);
     gaugepower.animationSpeed = 32;
 
