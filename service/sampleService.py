@@ -179,7 +179,7 @@ class SampleService(object):
             func.avg(Sample.PowerBattery), func.max(Sample.PowerBattery), func.min(Sample.PowerBattery),
             func.avg(Sample.CurrentBattery), func.max(Sample.CurrentBattery), func.min(Sample.CurrentBattery),
             func.avg(Sample.VoltageBattery), func.max(Sample.VoltageBattery), func.min(Sample.VoltageBattery))
-        query = query.filter(Sample.VoltageBattery > 18,
+        query = query.filter(Sample.VoltageBattery > 0, Sample.CurrentBattery >= 0, Sample.PowerBattery >= 0,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         batteryvoltage = query.first()
 
