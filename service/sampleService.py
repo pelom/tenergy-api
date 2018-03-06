@@ -239,14 +239,14 @@ class SampleService(object):
             },
             "battery": {
                 "power": {
-                    "avg": pvpower[0],
-                    "max": pvpower[1],
-                    "min": pvpower[2],
+                    "avg": batteryvoltage[0],
+                    "max": batteryvoltage[1],
+                    "min": batteryvoltage[2],
                 },
                 "current": {
-                    "avg": pvpower[3],
-                    "max": pvpower[4],
-                    "min": pvpower[5],
+                    "avg": batteryvoltage[3],
+                    "max": batteryvoltage[4],
+                    "min": batteryvoltage[5],
                 },
                 "voltage": {
                     "avg": batteryvoltage[6],
