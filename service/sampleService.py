@@ -190,11 +190,11 @@ class SampleService(object):
 
         query = session.query(func.min(Sample.CreatedDate), func.max(Sample.CreatedDate),
                               func.avg(Sample.PowerPV), func.max(Sample.PowerPV), func.min(Sample.PowerPV))
-        query = query.filter(Sample.CurrentPV > 0.01, Sample.PowerPV > 1,
+        query = query.filter(Sample.CurrentPV > 0.1, Sample.PowerPV > 1,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         pvpower = query.first()
 
-        fator_solar = 8
+        fator = 0
         hour = 0
         minute = 0
 
@@ -204,7 +204,7 @@ class SampleService(object):
             diff_time = pvpower[1] - pvpower[0]
             hour = diff_time.seconds // 3600
             minute = (diff_time.seconds // 60) % 60
-            #fator_solar = float(hour + (minute / float(60)))
+            fator = float(hour + (minute / float(60)))
 
         return {
             "sample": sample.to_json(),
@@ -217,13 +217,13 @@ class SampleService(object):
                     "avg": pvpower[2],
                     "max": pvpower[3],
                     "min": pvpower[4],
-                    "total": pvpower[2] * fator_solar
+                    "total": pvpower[2] * fator
                 },
                 "current": {
                     "avg": pvcurrent[0],
                     "max": pvcurrent[1],
                     "min": pvcurrent[2],
-                    "total": pvcurrent[0] * fator_solar
+                    "total": pvcurrent[0] * fator
                 },
                 "voltage": {
                     "avg": pvvoltage[0],
