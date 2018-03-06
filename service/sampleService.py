@@ -219,13 +219,13 @@ class SampleService(object):
                     "avg": pvpower[2],
                     "max": pvpower[3],
                     "min": pvpower[4],
-                    "total": pvpower[2]
+                    "total": pvpower[2] * hour
                 },
                 "current": {
                     "avg": pvpower[5],
                     "max": pvpower[6],
                     "min": pvpower[7],
-                    "total": pvpower[5]
+                    "total": pvpower[5] * hour
                 },
                 "voltage": {
                     "avg": pvvoltage[0],
