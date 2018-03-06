@@ -190,7 +190,7 @@ class SampleService(object):
 
         query = session.query(func.min(Sample.CreatedDate), func.max(Sample.CreatedDate),
                               func.avg(Sample.PowerPV), func.max(Sample.PowerPV), func.min(Sample.PowerPV))
-        query = query.filter(Sample.CurrentPV > 0.1, Sample.PowerPV > 1,
+        query = query.filter(Sample.CurrentPV > 0.5, Sample.PowerPV > 1,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         pvpower = query.first()
 
