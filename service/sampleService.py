@@ -192,7 +192,7 @@ class SampleService(object):
                               func.avg(Sample.PowerPV), func.max(Sample.PowerPV), func.min(Sample.PowerPV),
                               func.avg(Sample.CurrentPV), func.max(Sample.CurrentPV), func.min(Sample.CurrentPV))
 
-        query = query.filter(Sample.CurrentPV > 0.16,
+        query = query.filter(Sample.CurrentPV > 0.01,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         pvpower = query.first()
 
@@ -219,13 +219,13 @@ class SampleService(object):
                     "avg": pvpower[2],
                     "max": pvpower[3],
                     "min": pvpower[4],
-                    "total": pvpower[2] * fator
+                    "total": pvpower[2]
                 },
                 "current": {
                     "avg": pvpower[5],
                     "max": pvpower[6],
                     "min": pvpower[7],
-                    "total": pvpower[5] * fator
+                    "total": pvpower[5]
                 },
                 "voltage": {
                     "avg": pvvoltage[0],
