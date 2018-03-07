@@ -64,15 +64,18 @@ $(document).ready(function(){
             //$('#batteryvoltagemax').text(data.statistical.VoltageMaxBattery)
             //$('#batteryvoltagemin').text(data.statistical.VoltageMinBattery)
 
-            $('#batterypoweravg').text(datajson.battery.power.avg.toFixed(2))
+            var toValue = function(value) {
+                return !value ? 0 : value.toFixed(2)
+            };
+            $('#batterypoweravg').text(toValue(datajson.battery.power.avg))
             $('#batterypowermax').text(datajson.battery.power.max)
             $('#batterypowermin').text(datajson.battery.power.min)
 
-            $('#batteryvoltageavg').text(datajson.battery.voltage.avg.toFixed(2))
+            $('#batteryvoltageavg').text(toValue(datajson.battery.voltage.avg))
             $('#batteryvoltagemax').text(datajson.battery.voltage.max)
             $('#batteryvoltagemin').text(datajson.battery.voltage.min)
 
-            $('#batterycurrentavg').text(datajson.battery.current.avg.toFixed(2))
+            $('#batterycurrentavg').text(toValue(datajson.battery.current.avg))
             $('#batterycurrentmax').text(datajson.battery.current.max)
             $('#batterycurrentmin').text(datajson.battery.current.min)
 
