@@ -205,7 +205,7 @@ class SampleService(object):
         minute = 0
 
         if pvpower[0] is None:
-            pvpower = ['', '', 0, 0, 0]
+            pvpower = ['', '', 0, 0, 0, 0, 0, 0, 0, 0, 0]
         else:
             diff_time = pvpower[1] - pvpower[0]
             hour = diff_time.seconds // 3600

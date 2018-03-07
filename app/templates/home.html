@@ -7,7 +7,7 @@
 </script>
 
 <div class="card-deck">
-    <div class="card text-white bg-dark">
+    <div-- class="card text-white bg-dark">
         <div class="card-header">
             <h5 class="my-0 font-weight-normal"><i class="fas fa-mobile"></i> Tracer 4210A
                 <div class="float-right">
@@ -19,29 +19,29 @@
         <div class="card-footer">
             <h6 class="t-title-header"><i class="fas fa-moon pvicon"></i> PAINEL FOTOVOLTÁICO
                 <div class="float-right">
-                    <small id="headerstartdate" class="badge badge-warning"></small>
-                    <small id="headerenddate" class="badge badge-warning"></small></div>
+                    <i class="fas fa-sun"></i> <small id="headerstartdate" class="badge badge-warning"></small>
+                    <i class="fas fa-moon"></i> <small id="headerenddate" class="badge badge-warning"></small></div>
             </h6>
             <div class="row t-row">
-                <div class="col-md-3 t-col">
+                <div class="col-lg-3 col-md-3 col-sm-6 t-col">
                     <div class="t-name-header">Tensão</div>
                     <canvas style="width: 100%" height="50" id="canvas-volt"></canvas>
                     <div class="t-value-header">
                         <span id="volt-textfield">0.0</span> <small>V</small></div>
                 </div>
-                <div class="col-md-3 t-col">
+                <div class="col-lg-3 col-md-3 col-sm-6 t-col">
                     <div class="t-name-header">Corrente</div>
                     <canvas style="width: 100%" height="50" id="canvas-current"></canvas>
                     <div class="t-value-header">
                         <span id="current-textfield">0.0</span> <small>A</small></div>
                 </div>
-                <div class="col-md-3 t-col">
+                <div class="col-lg-3 col-md-3 col-sm-6 t-col">
                     <div class="t-name-header">Potência</div>
                     <canvas style="width: 100%" height="50" id="canvas-power"></canvas>
                     <div class="t-value-header">
                         <span id="power-textfield">0.0</span> <small>W</small></div>
                 </div>
-                <div class="col-md-3 t-col">
+                <div class="col-lg-3 col-md-3 col-sm-6 t-col">
                     <div class="t-name-header">Potência Gerada</div>
                     <canvas style="width: 100%" height="50" id="canvas-powertotal"></canvas>
                     <div class="t-value-header">
@@ -50,8 +50,12 @@
             </div>
 
             <h6 class="t-title-header"><i class="fas fa-battery-full"></i> BATERIA
-                <small id="headerbatterystatus" class="badge badge-primary"></small>
-                <small id="headerbatterycharge" class="badge badge-info"></small></h6>
+                <div class="float-right">
+                   <i class="fas fa-cog"></i> <small id="headerbatterysystem" class="badge badge-primary"></small>
+                   <i class="fas fa-stethoscope"></i> <small id="headerbatterystatus" class="badge badge-primary"></small>
+                   <i class="fas fa-plug"></i> <small id="headerbatterycharge" class="badge badge-info"></small>
+                </div>
+            </h6>
             <div class="row t-row">
                 <div class="col-md-3 t-col">
                     <div class="t-name-header">Tensão</div>
@@ -77,21 +81,13 @@
                     <div class="t-value-header">
                         <span id="batterysoc-textfield">0</span> <small>%</small></div>
                 </div>
-                <div class="col-md-3 t-col">
-                    <div class="t-name-header">Temperatura</div>
-                    <canvas style="width: 100%" height="50" id="canvas-temperature"></canvas>
-                    <div class="t-value-header">
-                        <span id="temperature-textfield">0</span> <small>º C</small></div>
-                </div>
-                <div class="col-md-3 t-col">
-                    <div class="t-name-header">Temperatura Remota</div>
-                    <canvas style="width: 100%" height="50" id="canvas-remote"></canvas>
-                    <div class="t-value-header">
-                        <span id="remote-textfield">0</span> <small>º C</small></div>
-                </div>
             </div>
 
-            <h6 class="t-title-header"><i class="fas fa-lightbulb"></i> SAÍDA</h6>
+            <h6 class="t-title-header"><i class="fas fa-lightbulb"></i> SAÍDA
+                <div class="float-right">
+                <i class="fas fa-sign-out-alt"></i> <small id="headerload" class="badge badge-primary"></small>
+                </div>
+            </h6>
             <div class="row t-row">
                 <div class="col-md-3 t-col">
                     <div class="t-name-header">Tensão</div>
@@ -117,59 +113,44 @@
                     <div class="t-value-header">
                         <span id="dischargingpowertotal-textfield">0.0</span> <small>Wh</small></div>
                 </div>
-                <!--div class="col-md-3 t-col">
-                    <div class="t-name-header">Potência Gerada</div>
-                    <canvas style="width: 100%" height="50" id="canvas-powertotal"></canvas>
-                    <div class="t-value-header">
-                        <span id="powertotal-textfield">0.0</span> <small>Wh</small></div>
-                </div-->
             </div>
+
+            <h6 class="t-title-header"><i class="fas fa-thermometer-three-quarters"></i> Temperatura ºC</h6>
+            <div class="row t-row">
+                <div class="col-md-3 t-col">
+                    <div class="t-name-header">Temperatura</div>
+                    <canvas style="width: 100%" height="50" id="canvas-temperature"></canvas>
+                    <div class="t-value-header">
+                        <span id="temperature-textfield">0</span> <small>º C</small></div>
+                </div>
+                <div class="col-md-3 t-col">
+                    <div class="t-name-header">Temperatura Remota</div>
+                    <canvas style="width: 100%" height="50" id="canvas-remote"></canvas>
+                    <div class="t-value-header">
+                        <span id="remote-textfield">0</span> <small>º C</small></div>
+                </div>
+               <div class="col-md-3 t-col">
+                    <div class="t-name-header">Equipamento</div>
+                    <canvas style="width: 100%" height="50" id="canvas-inside"></canvas>
+                    <div class="t-value-header">
+                        <span id="inside-textfield">0</span> <small>º C</small></div>
+                </div>
+                <div class="col-md-3 t-col">
+                    <div class="t-name-header">Componentes</div>
+                    <canvas style="width: 100%" height="50" id="canvas-component"></canvas>
+                    <div class="t-value-header">
+                        <span id="component-textfield">0</span> <small>º C</small></div>
+                </div>
+            </div>
+
             <div class="card-deck">
                 <div class="row mb-3">
                     <div class="col-lg-4 mb-4 col-md-12 col-info">
                         <div id="ctn_pv" class="card text-dark">
                             <div class="card-header">
-                                <h4 class="my-0"><i class="fas fa-moon pvicon"></i> Painel</h4>
+                                <h6 class="my-0"><i class="fas fa-moon pvicon"></i> Painel</h6>
                             </div>
                             <div class="card-body">
-                                <!--div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Tensão</small>
-                                        <span class="float-right">
-                                            <strong id="pvvoltage"></strong> <small>V</small></span>
-                                    </h4>
-                                </div>
-                                <div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Corrente</small>
-                                        <span class="float-right font-weight-bold">
-                                            <strong id="pvcurrent"></strong> <small>A</small></span>
-                                    </h4>
-                                </div>
-                                <div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Potência</small>
-                                        <span class="float-right font-weight-bold">
-                                            <strong id="pvpower"></strong> <small>W</small></span>
-                                    </h4>
-                                </div>
-                                <div class="line-info"><br></div>
-                                <div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Enêrgia Gerada</small>
-                                        <span class="float-right font-weight-bold">
-                                            <strong id="generatedenergy"></strong> <small>kWh</small></span>
-                                    </h4>
-                                </div-->
-
-                                <!--div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Produção</small>
-                                        <span class="float-right font-weight-bold">
-                                            <small id="generatedend"></small></span>
-                                    </h4>
-                                </div-->
-
                                 <div class="line-info text-center"><h6>Potência</h6></div>
                                 <!--div class="line-info" style="background: #FFF">
                                   <canvas id="myChart" width="400" height="400"></canvas>
@@ -195,13 +176,7 @@
                                             <strong id="pvpowermin"></strong> <small>W</small></span>
                                     </h6>
                                 </div>
-                                <!--div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Total</small>
-                                        <span class="float-right font-weight-bold">
-                                            <strong id="pvpowertotal"></strong> <small>Wh</small></span>
-                                    </h4>
-                                </div-->
+
                                 <div class="line-info text-center"><h6>Tensão</h6></div>
                                 <div class="line-info">
                                     <h6 class="card-title">
@@ -258,74 +233,12 @@
                         </div>
                     </div>
                     <div class=" col-info col-lg-4 mb-4 col-md-12">
-                        <div class="card text-white bg-dark">
+                        <div class="card text-dark bg-light">
                             <div class="card-header">
-                                <h4 class="my-0 font-weight-normal"><i class="fas fa-battery-full"></i> Bateria</h4>
+                                <h6 class="my-0 font-weight-normal"><i class="fas fa-battery-full"></i> Bateria</h6>
                             </div>
                             <div class="card-body">
-                                <!--div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Tensão</small>
-                                        <span class="float-right font-weight-bold">
-                                            <strong id="batteryvoltage"></strong> <small>V</small></span>
-                                    </h4>
-                                </div>
-                                <div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Corrente</small>
-                                        <span class="float-right font-weight-bold">
-                                            <strong id="batterycurrent"></strong> <small>A</small></span>
-                                    </h4>
-                                </div>
-                                <div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Potência</small>
-                                        <span class="float-right font-weight-bold">
-                                            <strong id="batterypower"></strong> <small>W</small></span>
-                                    </h4>
-                                </div>
 
-                                <div class="line-info"><br></div>
-                                <div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">SOC</small>
-                                        <div class="progress float-right" style="width: 50%;">
-                                            <div id="batterysoc" class="progress-bar bg-success progress-bar-striped"
-                                                 role="progressbar" style="width: 0%"><strong id="batterysocvalue"></strong>                                  </div>
-                                        </div>
-                                    </h4>
-                                </div>
-                                <div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Status</small>
-                                        <span class="float-right font-weight-bold">
-                                            <small id="batterystatus"></small></span>
-                                    </h4>
-                                </div>
-                                <div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Carga</small>
-                                        <span class="float-right font-weight-bold">
-                                            <small id="batterycharge"></small></span>
-                                    </h4>
-                                </div>
-
-                                <div class="line-info"><br></div>
-                                <div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Temperatura</small>
-                                        <span class="float-right font-weight-bold">
-                                            <strong id="batterytemperature"></strong> <small>ºC</small></span>
-                                    </h4>
-                                </div>
-                                <div class="line-info">
-                                    <h4 class="card-title">
-                                        <small class="float-left">Remota</small>
-                                        <span class="float-right font-weight-bold">
-                                            <strong id="batterytemperatureremote"></strong> <small>ºC</small></span>
-                                    </h4>
-                                </div>
-                                <div class="line-info"><br></div-->
                                 <div class="line-info text-center"><h6>Potência</h6></div>
                                 <!--div class="line-info" style="background: #FFF">
                                   <canvas id="myChart" width="400" height="400"></canvas>
@@ -442,38 +355,8 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <div class="line-info">
-                <h4 class="card-title">
-                    <small class="float-left">Tensão Sistema</small>
-                    <span class="float-right font-weight-bold">
-                        <strong id="systemvoltage"></strong> <small>V</small></span>
-                </h4>
-            </div>
-            <div class="line-info">
-                <h4 class="card-title">
-                    <small class="float-left">Temperatura</small>
-                    <span class="float-right font-weight-bold">
-                        <strong id="temperatureinsideequipment"></strong> <small>ºC</small></span>
-                </h4>
-            </div>
-            <div class="line-info">
-                <h4 class="card-title">
-                    <small class="float-left">Temperatura Componentes</small>
-                    <span class="float-right font-weight-bold">
-                        <strong id="temperaturepowercomponents"></strong> <small>ºC</small></span>
-                </h4>
-            </div>
-            <div class="line-info">
-                <h4 class="card-title">
-                    <small class="float-left">Saída (Load)</small>
-                    <span class="float-right font-weight-bold">
-                        <small id="statusdischarging"></small></span>
-                </h4>
-            </div>
-            <!--button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button-->
-        </div>
     </div>
+
     <!--div class="card bg-light mb-3">
         <div class="card-header">
             <h4 class="my-0 font-weight-normal"><i class="fas fa-mobile"></i> Tracer 4210A</h4>
@@ -508,6 +391,6 @@
 
 {% block scripts %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/gauge.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
+<!--script type="text/javascript" src="{{ url_for('static', filename='js/Chart.min.js') }}"></script-->
 <script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>
 {% endblock %}

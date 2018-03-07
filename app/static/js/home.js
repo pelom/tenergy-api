@@ -81,10 +81,10 @@ $(document).ready(function(){
 //            $('#dischargingpower').text(data.discharging.power)
             //$('#consumedenergy').text(data.statistical.ConsumedEnergy)
 
-            $('#systemvoltage').text(data.VoltageSystemBattery)
-            $('#temperatureinsideequipment').text(data.temperature.InsideEquipment)
-            $('#temperaturepowercomponents').text(data.temperature.PowerComponents)
-            $('#statusdischarging').text(data.StatusDischarging)
+//            $('#systemvoltage').text(data.VoltageSystemBattery)
+//            $('#temperatureinsideequipment').text(data.temperature.InsideEquipment)
+//            $('#temperaturepowercomponents').text(data.temperature.PowerComponents)
+//            $('#statusdischarging').text(data.StatusDischarging)
 
             $('#rtc').text(moment(data.CreatedDate).format('LLLL'))
             $('.pvicon').removeClass('fa-sun fa-moon')
@@ -127,6 +127,8 @@ $(document).ready(function(){
 //                }
 //            });
 
+            $('#headerload').text(data.StatusDischarging)
+            $('#headerbatterysystem').text(data.VoltageSystemBattery + 'V')
             $('#headerbatterystatus').text(get_status_battery(data.StatusBattery))
             $('#headerbatterycharge').text(get_status_charge(data.StatusCharge))
 
@@ -145,6 +147,9 @@ $(document).ready(function(){
             gaugedischargingvolt.set(data.discharging.voltage);
             gaugedischargingcurrent.set(data.discharging.current);
             gaugedischargingpower.set(data.discharging.power);
+
+            gaugetemperatureinside.set(data.temperature.InsideEquipment);
+            gaugetemperaturecomponent.set(data.temperature.PowerComponents);
         });
     }
     get_data()
@@ -309,11 +314,35 @@ $(document).ready(function(){
     ];
     var gaugeremote = new Gauge(document.getElementById("canvas-remote"));
     gaugeremote.setOptions(opts);
-    gaugeremote.setTextField(document.getElementById("remote-textfield"))
+    gaugeremote.setTextField(new CustomTextRenderer(document.getElementById("remote-textfield")))
     gaugeremote.maxValue = 60.0;
     gaugeremote.setMinValue(0.0);
     gaugeremote.animationSpeed = 32;
 
+
+    opts.staticZones = [
+       { strokeStyle: "#EEEEE", min: 0, max: 25  }, // Red from 100 to 130
+       { strokeStyle: "#FFDD00", min: 25, max: 45 }, // Yellow
+       { strokeStyle: "#F03E3E", min: 45, max: 60 }, // Green
+    ];
+    var gaugetemperatureinside = new Gauge(document.getElementById("canvas-inside"));
+    gaugetemperatureinside.setOptions(opts);
+    gaugetemperatureinside.setTextField(new CustomTextRenderer(document.getElementById("inside-textfield")))
+    gaugetemperatureinside.maxValue = 60.0;
+    gaugetemperatureinside.setMinValue(0.0);
+    gaugetemperatureinside.animationSpeed = 32;
+
+    opts.staticZones = [
+       { strokeStyle: "#EEEEE", min: 0, max: 25  }, // Red from 100 to 130
+       { strokeStyle: "#FFDD00", min: 25, max: 45 }, // Yellow
+       { strokeStyle: "#F03E3E", min: 45, max: 60 }, // Green
+    ];
+    var gaugetemperaturecomponent = new Gauge(document.getElementById("canvas-component"));
+    gaugetemperaturecomponent.setOptions(opts);
+    gaugetemperaturecomponent.setTextField(new CustomTextRenderer(document.getElementById("component-textfield")))
+    gaugetemperaturecomponent.maxValue = 60.0;
+    gaugetemperaturecomponent.setMinValue(0.0);
+    gaugetemperaturecomponent.animationSpeed = 32;
 
     var gaugedischargingvolt = new Gauge(document.getElementById("canvas-dischargingvolt"));
    opts.staticZones = [
