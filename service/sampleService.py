@@ -172,10 +172,13 @@ class SampleService(object):
         #query = query.limit(1)
         sampleHour = query.all()
 
-        return {
-            "sampleHour": sampleHour,
-            "sampleHour.size": len(sampleHour)
-        }
+        result = []
+        for it in range(0, len(sampleHour)):
+            result.append({
+                "CreatedDate": it[0],
+                "VoltageBattery": it[1],
+            })
+        return result
 
     def get_sample(self, now=datetime.datetime.now()):
         print 'now', now
