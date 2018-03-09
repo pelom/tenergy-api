@@ -9,7 +9,7 @@ from env import config
 from entity.sample import Sample
 from entity.sampleStatistical import SampleStatistical
 
-from sqlalchemy import func, desc
+from sqlalchemy import func, desc, hour
 
 class SampleService(object):
     def __init__(self, tracer_service=None, database=None):
@@ -165,7 +165,7 @@ class SampleService(object):
         session = self.database.create_session()
         query = session.query(func.avg(Sample.VoltageBattery))
         query = query.order_by(desc(Sample.CreatedDate))
-        query = query.group_by(func.hour(Sample.CreatedDate))
+        query = query.group_by(hour(Sample.CreatedDate))
         query = query.limit(1)
         sampleHour = query.all()
 
