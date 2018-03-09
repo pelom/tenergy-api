@@ -99,7 +99,7 @@ def device_monitorredirect():
     return jsonify(r.json())
 
 @app.route("/device/grouphourredirect", methods=['GET'])
-def device_monitorredirect():
+def device_grouphourredirect():
     logger.info('grouphourredirect()')
 
     params = {'date': '2018-03-04'}

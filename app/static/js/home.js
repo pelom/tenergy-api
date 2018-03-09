@@ -378,7 +378,7 @@ $(document).ready(function(){
     gaugedischargingpower.setMinValue(0.0);
     gaugedischargingpower.animationSpeed = 32;
 
-    $.get(url_context + 'device/grouphour', function(datajson) {
+    $.get(url_context + 'device/grouphourredirect', function(datajson) {
         console.log(datajson)
     })
     new Chart(document.getElementById("myChart"), {
