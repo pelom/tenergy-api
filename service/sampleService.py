@@ -163,9 +163,11 @@ class SampleService(object):
         end_date = datetime.datetime(now.year, now.month, 8, 23, 59, 59)
 
         session = self.database.create_session()
-        query = session.query(Sample.CreatedDate, func.avg(Sample.VoltageBattery))
-        query = query.filter(Sample.VoltageBattery > 18,
-                             Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
+        query = session.query(Sample.CreatedDate,
+                              func.avg(Sample.VoltageBattery),
+                              func.avg(Sample.CurrentBattery),
+                              func.avg(Sample.PowerBattery))
+        query = query.filter(Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         query = query.order_by(desc(Sample.CreatedDate))
         query = query.group_by(sa.func.strftime("%Y-%m-%d-%H", Sample.CreatedDate))
 
@@ -177,6 +179,8 @@ class SampleService(object):
             result.append({
                 "CreatedDate": sampleHour[it][0],
                 "VoltageBattery": sampleHour[it][1],
+                "CurrentBattery": sampleHour[it][2],
+                "PowerBattery": sampleHour[it][3],
             })
         return result
 
