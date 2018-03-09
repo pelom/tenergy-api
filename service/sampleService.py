@@ -159,8 +159,8 @@ class SampleService(object):
         return value_fields
 
     def get_sample_hour(self, now=datetime.datetime.now()):
-        start_date = datetime.datetime(now.year, now.month, 8, 0, 0, 0)
-        end_date = datetime.datetime(now.year, now.month, 8, 23, 59, 59)
+        start_date = datetime.datetime(now.year, now.month, now.day, 0, 0, 0)
+        end_date = datetime.datetime(now.year, now.month, now.day, 23, 59, 59)
 
         session = self.database.create_session()
         query = session.query(func.max(Sample.CreatedDate),

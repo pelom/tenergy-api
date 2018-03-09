@@ -383,8 +383,16 @@ $(document).ready(function(){
         console.log(datajson)
 
         labels = []
+        tensao = []
+        corrente = []
+        potencia = []
+        soc = []
         datajson.forEach(function (item) {
           labels.push(parseInt(new Date(item.CreatedDate).getHours()));
+          tensao.push(item.VoltageBattery)
+          corrente.push(item.CurrentBattery);
+          potencia.push(item.PowerBattery);
+          soc.push(item.BatterySOC);
         })
 
         new Chart(document.getElementById("myChart"), {
@@ -392,22 +400,22 @@ $(document).ready(function(){
           data: {
             labels: labels,
             datasets: [{
-                data: [86,114,106,106,107,111,133,221,783,2478],
+                data: tensao,
                 label: "Tensão",
                 borderColor: "#3e95cd",
                 fill: false
               }, {
-                data: [282,350,411,502,635,809,947,1402,3700,5267],
+                data: corrente,
                 label: "Corrente",
                 borderColor: "#8e5ea2",
                 fill: false
               }, {
-                data: [168,170,178,190,203,276,408,547,675,734],
+                data: potencia,
                 label: "Potência",
                 borderColor: "#3cba9f",
                 fill: false
               }, {
-                data: [40,20,10,16,24,38,74,167,508,784],
+                data: soc,
                 label: "SOC",
                 borderColor: "#e8c3b9",
                 fill: false
