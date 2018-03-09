@@ -98,6 +98,22 @@ def device_monitorredirect():
     print r.content
     return jsonify(r.json())
 
+@app.route("/device/grouphour", methods=['GET'])
+def device_monitor():
+    logger.info('device_monitor()')
+
+    charge_port = request.headers.get('charge_port', usb_port)
+    tracer_service = get_instance_tracer(charge_port)
+    sample_service = get_instance_sample(tracer_service)
+
+    param_date = request.args.get('date', None)
+    now = datetime.now()
+    if(param_date is not None):
+        now = datetime.strptime(param_date, '%Y-%m-%d')
+
+    sample = sample_service.get_sample_hour(now=now)
+    return jsonify(sample)
+
 @app.route("/device/monitor", methods=['GET'])
 def device_monitor():
     logger.info('device_monitor()')
