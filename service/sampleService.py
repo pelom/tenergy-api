@@ -166,12 +166,13 @@ class SampleService(object):
         query = session.query(Sample.CreatedDate,
                               func.avg(Sample.VoltageBattery),
                               func.avg(Sample.CurrentBattery),
-                              func.avg(Sample.PowerBattery))
+                              func.avg(Sample.PowerBattery),
+                              func.avg(Sample.BatterySOC))
         query = query.filter(Sample.VoltageBattery.isnot(None),
                              Sample.CurrentBattery.isnot(None), Sample.PowerBattery.isnot(None),
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         query = query.order_by(desc(Sample.CreatedDate))
-        query = query.group_by(sa.func.strftime("%Y-%m-%d-%H-%M", Sample.CreatedDate))
+        query = query.group_by(sa.func.strftime("%Y-%m-%d-%H", Sample.CreatedDate))
 
         #query = query.limit(1)
         sampleHour = query.all()
@@ -183,6 +184,7 @@ class SampleService(object):
                 "VoltageBattery": sampleHour[it][1],
                 "CurrentBattery": sampleHour[it][2],
                 "PowerBattery": sampleHour[it][3],
+                "BatterySOC": sampleHour[it][4],
             })
         return result
 
