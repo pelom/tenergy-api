@@ -2,8 +2,6 @@ $(document).ready(function(){
     moment.locale('pt-BR');
     //moment.locale('en-US');
 
-    console.log(url_context)
-
     get_status_charge = function(status) {
         if(status.trim() == '00 No charging') {
             return 'Não carregando'

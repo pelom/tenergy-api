@@ -112,6 +112,7 @@ def device_monitor():
         now = datetime.strptime(param_date, '%Y-%m-%d')
 
     sample = sample_service.get_sample(now=now)
+    print sample_service.get_sample_hour(now=now)
     return jsonify(sample)
 
     # sample = sample_service.sampling()

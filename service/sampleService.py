@@ -158,6 +158,21 @@ class SampleService(object):
         value_fields['AmbientTemp'] = 'Ambient Temp.'
         return value_fields
 
+    def get_sample_hour(self, now=datetime.datetime.now()):
+        start_date = datetime.datetime(now.year, now.month, now.day, 0, 0, 0)
+        end_date = datetime.datetime(now.year, now.month, now.day, 23, 59, 59)
+
+        session = self.database.create_session()
+        query = session.query(func.avg(Sample.VoltageBattery))
+        query = query.order_by(desc(Sample.CreatedDate))
+        query = query.group_by(func.date_trunc('hour', Sample.CreatedDate))
+        query = query.limit(1)
+        sampleHour = query.first()
+
+        return {
+            "sampleHour": sampleHour
+        }
+
     def get_sample(self, now=datetime.datetime.now()):
         print 'now', now
 
