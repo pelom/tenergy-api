@@ -171,7 +171,8 @@ class SampleService(object):
         sampleHour = query.all()
 
         return {
-            "sampleHour": sampleHour
+            "sampleHour": sampleHour,
+            "sampleHour.size": len(sampleHour)
         }
 
     def get_sample(self, now=datetime.datetime.now()):
