@@ -99,7 +99,7 @@ def device_monitorredirect():
     return jsonify(r.json())
 
 @app.route("/device/grouphour", methods=['GET'])
-def device_monitor():
+def device_grouphour():
     logger.info('device_monitor()')
 
     charge_port = request.headers.get('charge_port', usb_port)
