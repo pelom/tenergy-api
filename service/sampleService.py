@@ -167,7 +167,7 @@ class SampleService(object):
         query = query.order_by(desc(Sample.CreatedDate))
         query = query.group_by(func.hour(Sample.CreatedDate))
         query = query.limit(1)
-        sampleHour = query.first()
+        sampleHour = query.all()
 
         return {
             "sampleHour": sampleHour
