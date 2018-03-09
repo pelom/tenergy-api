@@ -378,41 +378,49 @@ $(document).ready(function(){
     gaugedischargingpower.setMinValue(0.0);
     gaugedischargingpower.animationSpeed = 32;
 
+
     $.get(url_context + 'device/grouphourredirect', function(datajson) {
         console.log(datajson)
-    })
-    new Chart(document.getElementById("myChart"), {
-      type: 'line',
-      data: {
-        /*labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],*/
-        datasets: [{
-            data: [86,114,106,106,107,111,133,221,783,2478],
-            label: "Tensão",
-            borderColor: "#3e95cd",
-            fill: false
-          }, {
-            data: [282,350,411,502,635,809,947,1402,3700,5267],
-            label: "Corrente",
-            borderColor: "#8e5ea2",
-            fill: false
-          }, {
-            data: [168,170,178,190,203,276,408,547,675,734],
-            label: "Potência",
-            borderColor: "#3cba9f",
-            fill: false
-          }, {
-            data: [40,20,10,16,24,38,74,167,508,784],
-            label: "SOC",
-            borderColor: "#e8c3b9",
-            fill: false
+
+        labels = []
+        datajson.forEach(function (item) {
+          labels.push(parseInt(new Date(item.CreatedDate).getHours()));
+        })
+
+        new Chart(document.getElementById("myChart"), {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+                data: [86,114,106,106,107,111,133,221,783,2478],
+                label: "Tensão",
+                borderColor: "#3e95cd",
+                fill: false
+              }, {
+                data: [282,350,411,502,635,809,947,1402,3700,5267],
+                label: "Corrente",
+                borderColor: "#8e5ea2",
+                fill: false
+              }, {
+                data: [168,170,178,190,203,276,408,547,675,734],
+                label: "Potência",
+                borderColor: "#3cba9f",
+                fill: false
+              }, {
+                data: [40,20,10,16,24,38,74,167,508,784],
+                label: "SOC",
+                borderColor: "#e8c3b9",
+                fill: false
+              }
+            ]
+          },
+          options: {
+            title: {
+              display: true,
+              text: 'World population per region (in millions)'
+            }
           }
-        ]
-      },
-      options: {
-        title: {
-          display: true,
-          text: 'World population per region (in millions)'
-        }
-      }
-    });
+        });
+    })
+
 });

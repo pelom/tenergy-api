@@ -180,7 +180,7 @@ class SampleService(object):
         result = []
         for it in range(0, len(sampleHour)):
             result.append({
-                "CreatedDate": sampleHour[it][0],
+                "CreatedDate": None if not sampleHour[it][0] else sampleHour[it][0].isoformat(),
                 "VoltageBattery": sampleHour[it][1],
                 "CurrentBattery": sampleHour[it][2],
                 "PowerBattery": sampleHour[it][3],
