@@ -159,12 +159,13 @@ class SampleService(object):
         return value_fields
 
     def get_sample_hour(self, now=datetime.datetime.now()):
-        start_date = datetime.datetime(now.year, now.month, now.day, 0, 0, 0)
-        end_date = datetime.datetime(now.year, now.month, now.day, 23, 59, 59)
+        start_date = datetime.datetime(now.year, now.month, 8, 0, 0, 0)
+        end_date = datetime.datetime(now.year, now.month, 8, 23, 59, 59)
 
         session = self.database.create_session()
         query = session.query(Sample.CreatedDate, func.avg(Sample.VoltageBattery))
-        query = query.filter(Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
+        query = query.filter(Sample.VoltageBattery > 18,
+                             Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         query = query.order_by(desc(Sample.CreatedDate))
         query = query.group_by(sa.func.strftime("%Y-%m-%d-%H", Sample.CreatedDate))
 
