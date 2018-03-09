@@ -175,8 +175,8 @@ class SampleService(object):
         result = []
         for it in range(0, len(sampleHour)):
             result.append({
-                "CreatedDate": it[0],
-                "VoltageBattery": it[1],
+                "CreatedDate": sampleHour[it][0],
+                "VoltageBattery": sampleHour[it][1],
             })
         return result
 
