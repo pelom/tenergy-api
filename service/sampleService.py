@@ -163,7 +163,7 @@ class SampleService(object):
         end_date = datetime.datetime(now.year, now.month, 8, 23, 59, 59)
 
         session = self.database.create_session()
-        query = session.query(Sample.CreatedDate,
+        query = session.query(func.max(Sample.CreatedDate),
                               func.avg(Sample.VoltageBattery),
                               func.avg(Sample.CurrentBattery),
                               func.avg(Sample.PowerBattery),
