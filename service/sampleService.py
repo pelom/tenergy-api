@@ -9,7 +9,7 @@ from env import config
 from entity.sample import Sample
 from entity.sampleStatistical import SampleStatistical
 
-from sqlalchemy import func, desc
+from sqlalchemy import func, desc, date_trunc
 
 class SampleService(object):
     def __init__(self, tracer_service=None, database=None):
