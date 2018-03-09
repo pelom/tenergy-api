@@ -152,9 +152,9 @@
                             </div>
                             <div class="card-body">
                                 <div class="line-info text-center"><h6>Potência</h6></div>
-                                <!--div class="line-info" style="background: #FFF">
+                                <div class="line-info" style="background: #FFF">
                                   <canvas id="myChart" width="400" height="400"></canvas>
-                                </div-->
+                                </div>
                                 <div class="line-info">
                                     <h6 class="card-title">
                                         <small class="float-left">Média</small>
@@ -391,6 +391,6 @@
 
 {% block scripts %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/gauge.min.js') }}"></script>
-<!--script type="text/javascript" src="{{ url_for('static', filename='js/Chart.min.js') }}"></script-->
+<script type="text/javascript" src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/home.js') }}"></script>
 {% endblock %}
