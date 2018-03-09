@@ -165,7 +165,7 @@ class SampleService(object):
         session = self.database.create_session()
         query = session.query(func.avg(Sample.VoltageBattery))
         query = query.order_by(desc(Sample.CreatedDate))
-        query = query.group_by(sa.func.strftime("%Y-%m-%d", Sample.CreatedDate))
+        query = query.group_by(sa.func.strftime("%Y-%m-%d-%H", Sample.CreatedDate))
 
         #query = query.limit(1)
         sampleHour = query.all()
