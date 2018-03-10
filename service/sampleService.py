@@ -292,7 +292,7 @@ if __name__ == "__main__":
 
     port = config.get('usb')[0]
     tracer_service = TracerService(serialclient=None, port=port)
-
+    tracer_service.sync_rtc()
     print tracer_service.read_value('Battery Capacity')
 #    tracer_service.write_value('Battery Capacity', 60)
 #    print tracer_service.read_value('Battery Capacity')
