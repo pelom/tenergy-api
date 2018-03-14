@@ -15,7 +15,12 @@ $(document).ready(function(){
     get_status_battery = function(status) {
         if(status.trim() == '00H Normal') {
             return 'Normal'
+        } else if(status.trim() == '02H Under Volt') {
+            return 'Tensão Inferior'
+        } else if(status.trim() == '03H Low Volt Disconnect') {
+            return 'Tensão Baixa - Disconectado'
         }
+
         return status;
     }
     get_data = function() {
