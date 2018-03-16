@@ -170,7 +170,7 @@ class SampleService(object):
                               func.avg(Sample.BatterySOC))
         query = query.filter(Sample.VoltageBattery.isnot(None),
                              Sample.CurrentBattery.isnot(None), Sample.PowerLowBattery.isnot(None),
-                             Sample.BatterySOC.isnot(None),
+                             Sample.BatterySOC < 100, Sample.BatterySOC > 0,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         query = query.order_by(desc(Sample.CreatedDate))
         query = query.group_by(sa.func.strftime("%Y-%m-%d-%H", Sample.CreatedDate))
