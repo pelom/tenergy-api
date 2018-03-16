@@ -166,9 +166,11 @@ class SampleService(object):
         query = session.query(func.max(Sample.CreatedDate),
                               func.avg(Sample.VoltageBattery),
                               func.avg(Sample.CurrentBattery),
-                              func.avg(Sample.PowerLowBattery),
+                              func.avg(Sample.PowerBattery),
                               func.avg(Sample.BatterySOC))
-        query = query.filter(Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
+        query = query.filter(Sample.VoltageBattery.isnot(None),
+                             Sample.CurrentBattery.isnot(None), Sample.PowerBattery.isnot(None),
+                             Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         query = query.order_by(desc(Sample.CreatedDate))
         query = query.group_by(sa.func.strftime("%Y-%m-%d-%H", Sample.CreatedDate))
 
