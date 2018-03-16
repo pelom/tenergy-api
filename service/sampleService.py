@@ -201,7 +201,7 @@ class SampleService(object):
         sample = query.first()
 
         query = session.query(
-            func.avg(Sample.PowerBattery), func.max(Sample.PowerBattery), func.min(Sample.PowerBattery),
+            func.avg(Sample.PowerLowBattery), func.max(Sample.PowerLowBattery), func.min(Sample.PowerLowBattery),
             func.avg(Sample.CurrentBattery), func.max(Sample.CurrentBattery), func.min(Sample.CurrentBattery),
             func.avg(Sample.VoltageBattery), func.max(Sample.VoltageBattery), func.min(Sample.VoltageBattery))
 
