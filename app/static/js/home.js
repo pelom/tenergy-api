@@ -28,17 +28,9 @@ $(document).ready(function(){
             console.log(datajson)
             data = datajson.sample
 
-//            $('#pvvoltage').text(data.pv.voltage)
-//            $('#pvcurrent').text(data.pv.current)
-//            $('#pvpower').text(data.pv.power)
-
-            //$('#pvvoltagemax').text(data.statistical.VoltageMaxPV)
-            //$('#pvvoltagemin').text(data.statistical.VoltageMinPV)
-
             $('#pvpoweravg').text(datajson.generated.power.avg.toFixed(2))
             $('#pvpowermax').text(datajson.generated.power.max)
             $('#pvpowermin').text(datajson.generated.power.min)
-            //$('#pvpowertotal').text(datajson.generated.power.total.toFixed(2))
 
             $('#pvvoltageavg').text(datajson.generated.voltage.avg.toFixed(2))
             $('#pvvoltagemax').text(datajson.generated.voltage.max)
@@ -49,12 +41,6 @@ $(document).ready(function(){
             $('#pvcurrentmin').text(datajson.generated.current.min)
             $('#pvcurrenttotal').text(datajson.generated.current.total.toFixed(2))
 
-            //$('#generatedenergy').text(data.statistical.GeneratedEnergy)
-
-//            $('#batteryvoltage').text(data.battery.voltage)
-//            $('#batterycurrent').text(data.battery.current)
-//            $('#batterypower').text(data.battery.power)
-
             $('#batterysoc').width( data.BatterySOC +'%');
             $('#batterysocvalue').text(data.BatterySOC + '%')
 
@@ -63,9 +49,6 @@ $(document).ready(function(){
 
             $('#batterytemperature').text(data.temperature.Battery)
             $('#batterytemperatureremote').text(data.temperature.RemoteBattery)
-
-            //$('#batteryvoltagemax').text(data.statistical.VoltageMaxBattery)
-            //$('#batteryvoltagemin').text(data.statistical.VoltageMinBattery)
 
             var toValue = function(value) {
                 return !value ? 0 : value.toFixed(2)
@@ -82,19 +65,11 @@ $(document).ready(function(){
             $('#batterycurrentmax').text(datajson.battery.current.max)
             $('#batterycurrentmin').text(datajson.battery.current.min)
 
-//            $('#dischargingvoltage').text(data.discharging.voltage)
-//            $('#dischargingcurrent').text(data.discharging.current)
-//            $('#dischargingpower').text(data.discharging.power)
-            //$('#consumedenergy').text(data.statistical.ConsumedEnergy)
-
-//            $('#systemvoltage').text(data.VoltageSystemBattery)
-//            $('#temperatureinsideequipment').text(data.temperature.InsideEquipment)
-//            $('#temperaturepowercomponents').text(data.temperature.PowerComponents)
-//            $('#statusdischarging').text(data.StatusDischarging)
-
             $('#rtc').text(moment(data.CreatedDate).format('LLLL'))
+
             $('.pvicon').removeClass('fa-sun fa-moon')
             $('#ctn_pv').removeClass('bg-light text-dark bg-dark text-white')
+
             if(data.StatusCharge.trim() == '00 No charging') {
                 $('#ctn_pv').addClass('bg-light text-dark')
                 $('.pvicon').addClass('fa-moon')
@@ -105,33 +80,6 @@ $(document).ready(function(){
 
             $('#headerstartdate').text(moment(datajson.generated.start).format('HH:mm'));
             $('#headerenddate').text(moment(datajson.generated.end).format('HH:mm'));
-
-//            $('#generatedend').text(moment(datajson.generated.start).format('HH:mm:ss') + ' às '
-//                + moment(datajson.generated.end).format('HH:mm:ss'))
-
-
-//            var ctx = $("#myChart");
-//            var myChart = new Chart(ctx, {
-//            type: 'bar',
-//                data: {
-//                    labels: ["Med", "Max", "Min", "Total"],
-//                    datasets: [{
-//                        label: 'Potência',
-//                        data: [datajson.generated.power.avg,
-//                        datajson.generated.power.max, datajson.generated.power.min, datajson.generated.power.total],
-//                        borderWidth: 1
-//                    }]
-//                },
-//                options: {
-//                    scales: {
-//                        yAxes: [{
-//                            ticks: {
-//                                beginAtZero:true
-//                            }
-//                        }]
-//                    }
-//                }
-//            });
 
             $('#headerload').text(data.StatusDischarging)
             $('#headerbatterysystem').text(data.VoltageSystemBattery + 'V')
@@ -393,13 +341,14 @@ $(document).ready(function(){
         potencia = []
         soc = []
         datajson.forEach(function (item) {
-          labels.push(parseInt(new Date(item.CreatedDate).getHours()));
-          tensao.push(item.VoltageBattery)
-          corrente.push(item.CurrentBattery);
-          potencia.push(item.PowerBattery);
-          soc.push(item.BatterySOC);
+          labels.splice(0, 0, parseInt(new Date(item.CreatedDate).getHours()));
+          tensao.splice(0, 0, item.VoltageBattery)
+          corrente.splice(0, 0, item.CurrentBattery);
+          potencia.splice(0, 0, item.PowerBattery);
+          soc.splice(0, 0, item.BatterySOC);
         })
 
+        Chart.defaults.global.defaultFontColor = '#FFF';
         new Chart(document.getElementById("myChart"), {
           type: 'line',
           data: {
@@ -430,7 +379,37 @@ $(document).ready(function(){
           options: {
             title: {
               display: true,
-              text: 'World population per region (in millions)'
+              text: 'Média por hora'
+            },
+            /*tooltips: {
+              mode: 'label',
+            },*/
+            hover: {
+              mode: 'nearest',
+              intersect: true
+            },
+            scales: {
+              xAxes: [{
+                display: true,
+                gridLines: {
+                  display: true,
+                  /*color: "#EEE"*/
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Hora'
+                }
+              }],
+              yAxes: [{
+                display: true,
+                gridLines: {
+                  display: true
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Média'
+                }
+              }]
             }
           }
         });

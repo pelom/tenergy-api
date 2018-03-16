@@ -200,25 +200,14 @@ class SampleService(object):
         query = query.limit(1)
         sample = query.first()
 
-        # query = session.query(func.avg(Sample.VoltagePV),
-        #                       func.max(Sample.VoltagePV), func.min(Sample.VoltagePV))
-        # query = query.filter(Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
-        # pvvoltage = query.first()
-
         query = session.query(
             func.avg(Sample.PowerBattery), func.max(Sample.PowerBattery), func.min(Sample.PowerBattery),
             func.avg(Sample.CurrentBattery), func.max(Sample.CurrentBattery), func.min(Sample.CurrentBattery),
             func.avg(Sample.VoltageBattery), func.max(Sample.VoltageBattery), func.min(Sample.VoltageBattery))
+
         query = query.filter(Sample.VoltageBattery > 0,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
-        batteryvoltage = query.first()
-
-        # query = session.query(func.min(Sample.CreatedDate), func.max(Sample.CreatedDate),
-        #                        func.avg(Sample.CurrentPV), func.max(Sample.CurrentPV), func.min(Sample.CurrentPV))
-        # query = query.filter(Sample.CurrentPV > 0, Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
-        # pvcurrent = query.first()
-        # if pvcurrent[0] is None:
-        #     pvcurrent = ['', '', 0, 0, 0]
+        battery = query.first()
 
         query = session.query(func.min(Sample.CreatedDate), func.max(Sample.CreatedDate),
                               func.avg(Sample.PowerPV), func.max(Sample.PowerPV), func.min(Sample.PowerPV),
@@ -228,16 +217,24 @@ class SampleService(object):
 
         query = query.filter(Sample.CurrentPV > 0, Sample.PowerPV > 0, Sample.VoltagePV > 0,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
-        pvpower = query.first()
+        pv = query.first()
+
+        query = session.query(func.avg(Sample.PowerDischarging), func.max(Sample.PowerDischarging), func.min(Sample.PowerDischarging),
+                              func.avg(Sample.CurrentDischarging), func.max(Sample.CurrentDischarging), func.min(Sample.CurrentDischarging),
+                              func.avg(Sample.VoltageDischarging), func.max(Sample.VoltageDischarging), func.min(Sample.VoltageDischarging)
+                              )
+        query = query.filter(Sample.CurrentDischarging > 0, Sample.PowerDischarging > 0, Sample.VoltageDischarging > 0,
+                             Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
+        load = query.first()
 
         fator = 0
         hour = 0
         minute = 0
 
-        if pvpower[0] is None:
-            pvpower = ['', '', 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        if pv[0] is None:
+            pv = ['', '', 0, 0, 0, 0, 0, 0, 0, 0, 0]
         else:
-            diff_time = pvpower[1] - pvpower[0]
+            diff_time = pv[1] - pv[0]
             hour = diff_time.seconds // 3600
             minute = (diff_time.seconds // 60) % 60
             fator = float(hour + (minute / float(60)))
@@ -245,47 +242,63 @@ class SampleService(object):
         return {
             "sample": sample.to_json(),
             "generated": {
-                "start": None if not pvpower[0] else pvpower[0].isoformat(),
-                "end": None if not pvpower[1] else pvpower[1].isoformat(),
+                "start": None if not pv[0] else pv[0].isoformat(),
+                "end": None if not pv[1] else pv[1].isoformat(),
                 "hour": hour,
                 "minute": minute,
                 "power": {
-                    "avg": pvpower[2],
-                    "max": pvpower[3],
-                    "min": pvpower[4],
-                    "total": pvpower[2] * hour
+                    "avg": pv[2],
+                    "max": pv[3],
+                    "min": pv[4],
+                    "total": pv[2] * hour
                 },
                 "current": {
-                    "avg": pvpower[5],
-                    "max": pvpower[6],
-                    "min": pvpower[7],
-                    "total": pvpower[5] * hour
+                    "avg": pv[5],
+                    "max": pv[6],
+                    "min": pv[7],
+                    "total": pv[5] * hour
                 },
                 "voltage": {
-                    "avg": pvpower[8],
-                    "max": pvpower[9],
-                    "min": pvpower[10]
+                    "avg": pv[8],
+                    "max": pv[9],
+                    "min": pv[10]
                 }
             },
             "battery": {
                 "power": {
-                    "avg": batteryvoltage[0],
-                    "max": batteryvoltage[1],
-                    "min": batteryvoltage[2],
+                    "avg": battery[0],
+                    "max": battery[1],
+                    "min": battery[2],
                 },
                 "current": {
-                    "avg": batteryvoltage[3],
-                    "max": batteryvoltage[4],
-                    "min": batteryvoltage[5],
+                    "avg": battery[3],
+                    "max": battery[4],
+                    "min": battery[5],
                 },
                 "voltage": {
-                    "avg": batteryvoltage[6],
-                    "max": batteryvoltage[7],
-                    "min": batteryvoltage[8]
+                    "avg": battery[6],
+                    "max": battery[7],
+                    "min": battery[8]
+                }
+            },
+            "discharging": {
+                "power": {
+                    "avg": load[0],
+                    "max": load[1],
+                    "min": load[2],
+                },
+                "current": {
+                    "avg": load[3],
+                    "max": load[4],
+                    "min": load[5],
+                },
+                "voltage": {
+                    "avg": load[6],
+                    "max": load[7],
+                    "min": load[8]
                 }
             }
         }
-
 
 if __name__ == "__main__":
     database = Database.get_instance()
