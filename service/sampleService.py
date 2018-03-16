@@ -239,6 +239,16 @@ class SampleService(object):
             minute = (diff_time.seconds // 60) % 60
             fator = float(hour + (minute / float(60)))
 
+        loadhour = 0
+
+        if load[0] is None:
+            load = ['', '', 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        else:
+            diff_time = load[1] - load[0]
+            loadhour = diff_time.seconds // 3600
+            #minute = (diff_time.seconds // 60) % 60
+            #fator = float(hour + (minute / float(60)))
+
         return {
             "sample": sample.to_json(),
             "generated": {
@@ -282,20 +292,25 @@ class SampleService(object):
                 }
             },
             "discharging": {
+                "start": None if not load[0] else load[0].isoformat(),
+                "end": None if not load[1] else load[1].isoformat(),
+                "hour": loadhour,
                 "power": {
-                    "avg": load[0],
-                    "max": load[1],
-                    "min": load[2],
+                    "avg": load[2],
+                    "max": load[3],
+                    "min": load[4],
+                    "total": load[2] * hour
                 },
                 "current": {
-                    "avg": load[3],
-                    "max": load[4],
-                    "min": load[5],
+                    "avg": load[5],
+                    "max": load[6],
+                    "min": load[7],
+                    "total": load[5] * hour
                 },
                 "voltage": {
-                    "avg": load[6],
-                    "max": load[7],
-                    "min": load[8]
+                    "avg": load[8],
+                    "max": load[9],
+                    "min": load[10]
                 }
             }
         }

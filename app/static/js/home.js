@@ -69,6 +69,14 @@ $(document).ready(function(){
             $('#dischargingpowermax').text(datajson.discharging.power.max)
             $('#dischargingpowermin').text(datajson.discharging.power.min)
 
+            $('#dischargingvoltageavg').text(toValue(datajson.discharging.voltage.avg))
+            $('#dischargingvoltagemax').text(datajson.discharging.voltage.max)
+            $('#dischargingvoltagemin').text(datajson.discharging.voltage.min)
+
+            $('#dischargingcurrentavg').text(toValue(datajson.discharging.current.avg))
+            $('#dischargingcurrentmax').text(datajson.discharging.current.max)
+            $('#dischargingcurrentmin').text(datajson.discharging.current.min)
+
             $('#rtc').text(moment(data.CreatedDate).format('LLLL'))
 
             $('.pvicon').removeClass('fa-sun fa-moon')
