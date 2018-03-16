@@ -67,12 +67,12 @@ class Sample(Base):
             'pv': {
                 'voltage': self.VoltagePV,
                 'current': self.CurrentPV,
-                'power': self.PowerPV,
+                'power': self.PowerLowPV,
             },
             'battery': {
                 'voltage': self.VoltageBattery,
                 'current': self.CurrentBattery,
-                'power': self.PowerBattery,
+                'power': self.PowerLowBattery,
             },
             'discharging': {
                 'voltage': self.VoltageDischarging,
