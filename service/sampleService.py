@@ -166,7 +166,7 @@ class SampleService(object):
         query = session.query(func.max(Sample.CreatedDate),
                               func.avg(Sample.VoltageBattery),
                               func.avg(Sample.CurrentBattery),
-                              func.avg(Sample.PowerBattery),
+                              func.avg(Sample.PowerLowBattery),
                               func.avg(Sample.BatterySOC))
         query = query.filter(Sample.VoltageBattery.isnot(None),
                              Sample.CurrentBattery.isnot(None), Sample.PowerBattery.isnot(None),
