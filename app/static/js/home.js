@@ -113,6 +113,7 @@ $(document).ready(function(){
             gaugedischargingvolt.set(data.discharging.voltage);
             gaugedischargingcurrent.set(data.discharging.current);
             gaugedischargingpower.set(data.discharging.power);
+            gaugedischargingpowertotal.set(datajson.discharging.power.total);
 
             gaugetemperatureinside.set(data.temperature.InsideEquipment);
             gaugetemperaturecomponent.set(data.temperature.PowerComponents);
@@ -343,6 +344,13 @@ $(document).ready(function(){
     gaugedischargingpower.setMinValue(0.0);
     gaugedischargingpower.animationSpeed = 32;
 
+    opts.staticZones = undefined;
+    var gaugedischargingpowertotal = new Gauge(document.getElementById("canvas-dischargingpowertotal"));
+    gaugedischargingpowertotal.setOptions(opts);
+    gaugedischargingpowertotal.setTextField(new CustomTextRenderer(document.getElementById("dischargingpowertotal-textfield")))
+    gaugedischargingpowertotal.maxValue = 5000.0;
+    gaugedischargingpowertotal.setMinValue(0.0);
+    gaugedischargingpowertotal.animationSpeed = 32;
 
     $.get(url_context + 'device/grouphourredirect', function(datajson) {
         console.log(datajson)
