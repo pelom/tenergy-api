@@ -77,7 +77,7 @@ class Sample(Base):
             'discharging': {
                 'voltage': self.VoltageDischarging,
                 'current': self.CurrentDischarging,
-                'power': self.PowerDischarging,
+                'power': self.PowerLowDischarging,
             },
             'temperature': {
                 'Battery': self.TemperatureBattery,

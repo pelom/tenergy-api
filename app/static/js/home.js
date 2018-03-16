@@ -65,6 +65,10 @@ $(document).ready(function(){
             $('#batterycurrentmax').text(datajson.battery.current.max)
             $('#batterycurrentmin').text(datajson.battery.current.min)
 
+            $('#dischargingpoweravg').text(toValue(datajson.discharging.power.avg))
+            $('#dischargingpowermax').text(datajson.discharging.power.max)
+            $('#dischargingpowermin').text(datajson.discharging.power.min)
+
             $('#rtc').text(moment(data.CreatedDate).format('LLLL'))
 
             $('.pvicon').removeClass('fa-sun fa-moon')
