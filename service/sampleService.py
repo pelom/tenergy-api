@@ -216,7 +216,8 @@ class SampleService(object):
                               func.avg(Sample.VoltagePV), func.max(Sample.VoltagePV), func.min(Sample.VoltagePV)
                               )
 
-        query = query.filter(Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
+        query = query.filter(Sample.CurrentPV >= 0, Sample.PowerLowPV >= 0, Sample.VoltagePV >= 0,
+                             Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         pv = query.first()
 
         query = session.query(
@@ -225,7 +226,8 @@ class SampleService(object):
                               func.avg(Sample.CurrentDischarging), func.max(Sample.CurrentDischarging), func.min(Sample.CurrentDischarging),
                               func.avg(Sample.VoltageDischarging), func.max(Sample.VoltageDischarging), func.min(Sample.VoltageDischarging)
                               )
-        query = query.filter(Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
+        query = query.filter(Sample.CurrentDischarging >= 0, Sample.PowerLowDischarging >= 0, Sample.VoltageDischarging >= 0,
+                             Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         load = query.first()
 
         fator = 0
