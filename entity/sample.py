@@ -1,3 +1,5 @@
+import math
+
 from env import datetime_now_tz
 
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Float
@@ -67,17 +69,17 @@ class Sample(Base):
             'pv': {
                 'voltage': self.VoltagePV,
                 'current': self.CurrentPV,
-                'power': self.PowerLowPV,
+                'power': math.fabs(self.PowerLowPV),
             },
             'battery': {
                 'voltage': self.VoltageBattery,
                 'current': self.CurrentBattery,
-                'power': self.PowerLowBattery,
+                'power': math.fabs(self.PowerLowBattery),
             },
             'discharging': {
                 'voltage': self.VoltageDischarging,
                 'current': self.CurrentDischarging,
-                'power': self.PowerLowDischarging,
+                'power': math.fabs(self.PowerLowDischarging),
             },
             'temperature': {
                 'Battery': self.TemperatureBattery,
