@@ -192,8 +192,8 @@ class SampleService(object):
     def get_sample(self, now=datetime.datetime.now()):
         print 'now', now
 
-        start_date = datetime.datetime(now.year, now.month, 16, 0, 0, 0)
-        end_date = datetime.datetime(now.year, now.month, 16, 23, 59, 59)
+        start_date = datetime.datetime(now.year, now.month, now.day, 0, 0, 0)
+        end_date = datetime.datetime(now.year, now.month, now.day, 23, 59, 59)
 
         session = self.database.create_session()
         query = session.query(Sample)
