@@ -302,13 +302,13 @@ class SampleService(object):
                     "avg": load[2],
                     "max": load[3],
                     "min": load[4],
-                    "total": load[2] * hour
+                    "total": load[2] * loadhour
                 },
                 "current": {
                     "avg": load[5],
                     "max": load[6],
                     "min": load[7],
-                    "total": load[5] * hour
+                    "total": load[5] * loadhour
                 },
                 "voltage": {
                     "avg": load[8],
