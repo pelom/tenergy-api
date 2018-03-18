@@ -24,7 +24,7 @@ $(document).ready(function(){
         return status;
     }
     get_data = function() {
-        $.get(url_context + 'device/monitorredirect', function(datajson) {
+        $.get(url_context + 'device/monitor', function(datajson) {
             console.log(datajson)
             data = datajson.sample
 
@@ -352,7 +352,7 @@ $(document).ready(function(){
     gaugedischargingpowertotal.setMinValue(0.0);
     gaugedischargingpowertotal.animationSpeed = 32;
 
-    $.get(url_context + 'device/grouphourredirect', function(datajson) {
+    $.get(url_context + 'device/grouphour', function(datajson) {
         console.log(datajson)
 
         labels = []
