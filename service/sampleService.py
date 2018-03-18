@@ -166,10 +166,10 @@ class SampleService(object):
         query = session.query(func.max(Sample.CreatedDate),
                               func.avg(Sample.VoltageBattery),
                               func.avg(Sample.CurrentBattery),
-                              func.avg(Sample.PowerLowBattery),
+                              func.avg(func.abs(Sample.PowerLowBattery)),
                               func.avg(Sample.BatterySOC))
         query = query.filter(Sample.VoltageBattery.isnot(None),
-                             Sample.CurrentBattery.isnot(None), Sample.PowerLowBattery >= 0,
+                             Sample.CurrentBattery.isnot(None), Sample.PowerLowBattery.isnot(None),
                              Sample.BatterySOC <= 100, Sample.BatterySOC >= 0,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         query = query.order_by(desc(Sample.CreatedDate))
@@ -201,24 +201,38 @@ class SampleService(object):
         query = query.limit(1)
         sample = query.first()
 
-        query = session.query(
-            func.avg(Sample.PowerLowBattery), func.max(Sample.PowerLowBattery), func.min(Sample.PowerLowBattery),
-            func.avg(Sample.CurrentBattery), func.max(Sample.CurrentBattery), func.min(Sample.CurrentBattery),
-            func.avg(Sample.VoltageBattery), func.max(Sample.VoltageBattery), func.min(Sample.VoltageBattery))
+        query = session.query(func.avg(Sample.VoltageBattery),
+                              func.max(Sample.VoltageBattery),
+                              func.min(Sample.VoltageBattery))
 
-        query = query.filter(Sample.VoltageBattery < 50, Sample.VoltageBattery > 20, Sample.PowerLowBattery > 0,
+        query = query.filter(Sample.VoltageBattery < 50, Sample.VoltageBattery > 18,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         battery = query.first()
 
         query = session.query(func.min(Sample.CreatedDate), func.max(Sample.CreatedDate),
-                              func.avg(Sample.PowerLowPV), func.max(Sample.PowerLowPV), func.min(Sample.PowerLowPV),
-                              func.avg(Sample.CurrentPV), func.max(Sample.CurrentPV), func.min(Sample.CurrentPV),
-                              func.avg(Sample.VoltagePV), func.max(Sample.VoltagePV), func.min(Sample.VoltagePV)
-                              )
+                              func.avg(func.abs(Sample.PowerPV)),
+                              func.max(func.abs(Sample.PowerPV)),
+                              func.min(func.abs(Sample.PowerPV)),
 
-        query = query.filter(Sample.CurrentPV > 0, Sample.PowerLowPV > 0, Sample.VoltagePV > 20,
+                              func.avg(Sample.CurrentPV),
+                              func.max(Sample.CurrentPV),
+                              func.min(Sample.CurrentPV),
+
+                              func.avg(Sample.VoltagePV),
+                              func.max(Sample.VoltagePV),
+                              func.min(Sample.VoltagePV),
+
+                            func.avg(func.abs(Sample.PowerLowBattery)),
+                            func.max(func.abs(Sample.PowerLowBattery)),
+                            func.min(func.abs(Sample.PowerLowBattery)),
+
+                            func.avg(Sample.CurrentBattery),
+                            func.max(Sample.CurrentBattery),
+                            func.min(Sample.CurrentBattery))
+
+        query = query.filter(Sample.CurrentPV > 0, Sample.VoltagePV > 0,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
-        pv = query.first()
+        generated = query.first()
 
         query = session.query(
                             func.min(Sample.CreatedDate), func.max(Sample.CreatedDate),
@@ -227,7 +241,7 @@ class SampleService(object):
                               func.avg(Sample.VoltageDischarging), func.max(Sample.VoltageDischarging), func.min(Sample.VoltageDischarging)
                               )
         query = query.filter(Sample.CurrentDischarging > 0, Sample.PowerLowDischarging > 0,
-                             Sample.VoltageDischarging < 50, Sample.VoltageDischarging > 20,
+                             Sample.VoltageDischarging < 50, Sample.VoltageDischarging > 18,
                              Sample.CreatedDate >= start_date, Sample.CreatedDate < end_date)
         load = query.first()
 
@@ -235,81 +249,84 @@ class SampleService(object):
         hour = 0
         minute = 0
 
-        if pv[0] is None:
-            pv = ['', '', 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        if generated[0] is None:
+            generated = ['', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         else:
-            diff_time = pv[1] - pv[0]
+            diff_time = generated[1] - generated[0]
             hour = diff_time.seconds // 3600
             minute = (diff_time.seconds // 60) % 60
             fator = float(hour + (minute / float(60)))
 
         loadhour = 0
-
+        loadminute = 0
+        loadfator = 0
         if load[0] is None:
             load = ['', '', 0, 0, 0, 0, 0, 0, 0, 0, 0]
         else:
             diff_time = load[1] - load[0]
             loadhour = diff_time.seconds // 3600
-            #minute = (diff_time.seconds // 60) % 60
-            #fator = float(hour + (minute / float(60)))
+            loadminute = (diff_time.seconds // 60) % 60
+            loadfator = float(loadhour + (minute / float(60)))
 
         return {
             "sample": sample.to_json(),
             "generated": {
-                "start": None if not pv[0] else pv[0].isoformat(),
-                "end": None if not pv[1] else pv[1].isoformat(),
+                "start": None if not generated[0] else generated[0].isoformat(),
+                "end": None if not generated[1] else generated[1].isoformat(),
                 "hour": hour,
                 "minute": minute,
                 "power": {
-                    "avg": pv[2],
-                    "max": pv[3],
-                    "min": pv[4],
-                    "total": pv[2] * hour
+                    "avg": generated[2],
+                    "max": generated[3],
+                    "min": generated[4],
+                    "total": generated[2] * fator
                 },
                 "current": {
-                    "avg": pv[5],
-                    "max": pv[6],
-                    "min": pv[7],
-                    "total": pv[5] * hour
+                    "avg": generated[5],
+                    "max": generated[6],
+                    "min": generated[7],
+                    "total": generated[5] * fator
                 },
                 "voltage": {
-                    "avg": pv[8],
-                    "max": pv[9],
-                    "min": pv[10]
+                    "avg": generated[8],
+                    "max": generated[9],
+                    "min": generated[10]
                 }
             },
             "battery": {
                 "power": {
-                    "avg": battery[0],
-                    "max": battery[1],
-                    "min": battery[2],
+                    "avg": generated[11],
+                    "max": generated[12],
+                    "min": generated[13],
                 },
                 "current": {
-                    "avg": battery[3],
-                    "max": battery[4],
-                    "min": battery[5],
+                    "avg": generated[14],
+                    "max": generated[15],
+                    "min": generated[16],
                 },
                 "voltage": {
-                    "avg": battery[6],
-                    "max": battery[7],
-                    "min": battery[8]
+                    "avg": battery[0],
+                    "max": battery[1],
+                    "min": battery[2]
                 }
             },
             "discharging": {
                 "start": None if not load[0] else load[0].isoformat(),
                 "end": None if not load[1] else load[1].isoformat(),
                 "hour": loadhour,
+                "minute": loadminute,
+                "loadfator": loadfator,
                 "power": {
                     "avg": load[2],
                     "max": load[3],
                     "min": load[4],
-                    "total": load[2] * loadhour
+                    "total": load[2] * loadfator
                 },
                 "current": {
                     "avg": load[5],
                     "max": load[6],
                     "min": load[7],
-                    "total": load[5] * loadhour
+                    "total": load[5] * loadfator
                 },
                 "voltage": {
                     "avg": load[8],

@@ -120,7 +120,7 @@ $(document).ready(function(){
         });
     }
     get_data()
-    window.setInterval(get_data, 5000);
+    window.setInterval(get_data, 60000);
 
     var opts = {
         angle: -0.1, // The span of the gauge arc

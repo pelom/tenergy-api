@@ -69,12 +69,12 @@ class Sample(Base):
             'pv': {
                 'voltage': self.VoltagePV,
                 'current': self.CurrentPV,
-                'power': math.fabs(self.PowerLowPV),
+                'power': 0 if self.PowerLowPV is None else math.fabs(self.PowerLowPV),
             },
             'battery': {
                 'voltage': self.VoltageBattery,
                 'current': self.CurrentBattery,
-                'power': math.fabs(self.PowerLowBattery),
+                'power': 0 if self.PowerLowBattery is None else math.fabs(self.PowerLowBattery),
             },
             'discharging': {
                 'voltage': self.VoltageDischarging,
