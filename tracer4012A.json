@@ -1,0 +1,63 @@
+{
+  "BatteryCapacity": 220, 
+  "BatteryRatedVoltage": {
+    "Code": 0, 
+    "Name": "0-Auto Recognize", 
+    "Values": [
+      "0-Auto Recognize", 
+      "1-12V", 
+      "2-24V"
+    ]
+  }, 
+  "BatteryType": {
+    "Code": 1, 
+    "Name": " 0001H- Sealed", 
+    "Values": [
+      "0000H- User defined", 
+      " 0001H- Sealed", 
+      " 0002H- GEL", 
+      " 0003H- Flooded"
+    ]
+  }, 
+  "BoostDuration": 120, 
+  "BoostReconnectVoltage": 26.4, 
+  "BoostVoltage": 28.8, 
+  "ChargingLimitVoltage": 30.0, 
+  "ChargingPercentage": 100, 
+  "DayTimeThresholdDelay": 10, 
+  "DayTimeThresholdVolt": 12.0, 
+  "DischargingLimitVoltage": 21.2, 
+  "DischargingPercentage": 30, 
+  "EqualizationChargingCycle": 30, 
+  "EqualizationVoltage": 29.2, 
+  "EqualizeDuration": 120, 
+  "FloatVoltage": 27.6, 
+  "HighVoltageDisconnect": 32.0, 
+  "HighVoltageReconnect": 30.0, 
+  "LoadControlingModes": {
+    "Code": 0, 
+    "Name": "0000H Manual Control", 
+    "Values": [
+      "0000H Manual Control", 
+      " 0001H Light ON/OFF", 
+      " 0002H Light ON+ Timer/", 
+      " 0003H Time Control"
+    ]
+  }, 
+  "LowVoltageDisconnect": 22.2, 
+  "LowVoltageReconnect": 25.2, 
+  "ManagementModeBattery": {
+    "Code": 0, 
+    "Name": "0-Voltage Compensation", 
+    "Values": [
+      "0-Voltage Compensation", 
+      "1-SOC"
+    ]
+  }, 
+  "NightTimeThresholdDelay": 10, 
+  "NightTimeThresholdVolt": 10.0, 
+  "TemperatureCompensationCoefficient": 3.0, 
+  "TimeClock": "2018-03-04T14:28:58", 
+  "UnderVoltageRecover": 24.4, 
+  "UnderVoltageWarning": 24.0
+}
