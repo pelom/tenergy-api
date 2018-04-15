@@ -9,7 +9,7 @@ from service.sampleService import SampleService
 logger = log(__name__)
 logger.info('ServeTracer')
 
-app = Flask(__name__)
+app = Flask('ServeTracer')
 app.config.update(
     DEBUG=True,
     SECRET_KEY='secret_xxx')
