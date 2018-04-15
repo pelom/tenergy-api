@@ -12,8 +12,8 @@ class ChargeEquipmentService(object):
         if tracer_service is None:
             raise ValueError('tracer_service is NULL')
 
-        if database is None:
-            raise ValueError('database is NULL')
+        #if database is None:
+        #    raise ValueError('database is NULL')
 
         self.database = database
         self.tracer_service = tracer_service

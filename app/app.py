@@ -10,7 +10,9 @@ from service.tracerService import TracerService
 from service.chargeEquipmentService import ChargeEquipmentService
 from service.sampleService import SampleService
 
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, url_for, redirect, abort
+from flask_login import LoginManager, UserMixin, \
+    login_required, login_user, logout_user
 
 logger = log(__name__)
 logger.info('Tenergy Serve')
@@ -21,9 +23,16 @@ for key, value in config.iteritems():
 database = Database.get_instance()
 
 app = Flask(__name__)
-
+app.config.update(
+    DEBUG=True,
+    SECRET_KEY='secret_xxx'
+)
 usb_port = config.get('usb')[0]
 
+# flask-login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
 
 def get_instance_tracer(charge_port):
     return TracerService(serialclient=None, port=charge_port)
@@ -36,6 +45,9 @@ def get_instance_equip(tracer_client):
 def get_instance_sample(tracer_client):
     return SampleService(tracer_service=tracer_client, database=database)
 
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 @app.route("/device", methods=['GET'])
 def device():
@@ -50,6 +62,7 @@ def device():
 
 
 @app.route("/device/settings", methods=['GET'])
+@login_required
 def device_settings():
     logger.info('device_settings()')
 
@@ -174,6 +187,58 @@ def home():
     url = request.url
     return render_template('home.html', url_context=url_context, ip=ip, url=url)
 
+
+class User(UserMixin):
+    def __init__(self, id):
+        self.id = id
+        self.name = "user" + str(id)
+        self.password = self.name + "_secret"
+
+    def __repr__(self):
+        return "%d/%s/%s" % (self.id, self.name, self.password)
+
+users = [User(id) for id in range(1, 21)]
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    print 'login()'
+
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        print 'username: ', username
+
+        if password == username + "_secret":
+            id = username.split('user')[1]
+            user = User(id)
+            login_user(user)
+            return redirect(request.args.get("next"))
+        else:
+            return abort(401)
+
+    return render_template('login.html')
+
+# somewhere to logout
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    #return Response('<p>Logged out</p>')
+    return redirect('login')
+
+# handle login failed
+@app.errorhandler(401)
+def page_not_found(e):
+    print 'page_not_found()', e
+    return redirect('login')
+
+
+# callback to reload the user object
+@login_manager.user_loader
+def load_user(userid):
+    print 'load_user() userid: ', userid
+    return User(userid)
 
 if __name__ == "__main__":
     serve_config = config.get('serve')

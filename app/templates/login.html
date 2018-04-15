@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="login">
+    <h4>Login da aplicação</h4>
+    <hr>
+    <form class="login-inner" action="" method="post">
+        <input type="text" class="form-control email" name="username" id="email-input" placeholder="Nome do usuário">
+        <input type="password" class="form-control password" name="password" id="password-input" placeholder="Senha">
+        <input class="btn btn-block btn-lg submit" type="submit" value="Entrar">
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!--script type="text/javascript" src="{{ url_for('static', filename='js/gauge.min.js') }}"></script-->
+{% endblock %}
