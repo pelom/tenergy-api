@@ -42,8 +42,8 @@ class ChargeEquipmentService(object):
 
         value_map = dict()
 
-        time_clock = self.tracer_service.tracer_client.read_rtc()
-        value_map.setdefault('TimeClock', time_clock.isoformat())
+        #time_clock = self.tracer_service.tracer_client.read_rtc()
+        #value_map.setdefault('TimeClock', time_clock.isoformat())
 
         value = self.tracer_service.read_value('Battery Type')
         value_map.setdefault('BatteryType', ChargeEquipmentService.define_option(value))

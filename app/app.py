@@ -197,8 +197,26 @@ def settings():
         url=url_context,
         # params=params
     )
-    print res.content
-    return render_template('settings.html')
+
+    setting = res.json()
+    battery_capacity = setting['BatteryCapacity']
+
+    temp = setting['BatteryRatedVoltage']
+    battery_rated_voltage = temp['Values']
+    battery_rated_voltage_value = temp['Name']
+
+    temp = setting['BatteryType']
+    battery_type = temp['Values']
+    battery_type_value = temp['Name']
+
+    temp = setting['ManagementModeBattery']
+    management_mode_battery = temp['Values']
+    management_mode_battery_value = temp['Name']
+
+    charging_percentage = setting['ChargingPercentage']
+    discharging_percentage = setting['DischargingPercentage']
+
+    return render_template('settings.html', **locals())
 
 class User(UserMixin):
     def __init__(self, id):

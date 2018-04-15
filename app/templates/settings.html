@@ -1,21 +1,58 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
 <div class="login">
-    <h4>Login da aplicação</h4>
-    <hr>
     <form class="login-inner" action="" method="post">
-        <div class="form-group">
-            <label>Battery Capacity (Ah)</label>
-            <input type="text" class="form-control" value="{% setting.BatteryCapacity %}">
+    <h4>Battery</h4>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Capacity (Ah)</label>
+                <input type="text" class="form-control" value="{{ battery_capacity }}">
+            </div>
+            <div class="form-group">
+                <label>Type</label>
+                <select class="form-control">
+                    {% for value in battery_type %}
+                    <option value="{{ value }}" {% if value == battery_type_value %} selected {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Charging %</label>
+                <input type="text" class="form-control" value="{{ charging_percentage }}">
+            </div>
         </div>
-        <div class="form-group">
-            <label for="formGroupExampleInput2">Battery Rated Voltage</label>
-            <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="exampleSelect1">Rated Voltage</label>
+                <select class="form-control" id="exampleSelect1">
+                    {% for value in battery_rated_voltage %}
+                    <option value="{{ value }}" {% if value == battery_rated_voltage_value %} selected {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleSelect1">Management Mode</label>
+                <select class="form-control">
+                    {% for value in management_mode_battery %}
+                    <option value="{{ value }}" {% if value == management_mode_battery_value %} selected {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Discharging %</label>
+                <input type="text" class="form-control" value="{{ discharging_percentage }}">
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+
+
+             <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
     </form>
+
 </div>
 {% endblock %}
 
