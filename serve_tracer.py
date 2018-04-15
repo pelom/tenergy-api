@@ -6,13 +6,6 @@ from service.tracerService import TracerService
 from service.chargeEquipmentService import ChargeEquipmentService
 from service.sampleService import SampleService
 
-from app.app import app
-
-serve_config = config.get('serve')
-
-app.run(host=serve_config.get('ip'),
-        port=serve_config.get('port'),
-        debug=serve_config.get('debug'))
 logger = log(__name__)
 logger.info('ServeTracer')
 

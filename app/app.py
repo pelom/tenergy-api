@@ -188,6 +188,18 @@ def home():
     return render_template('home.html', url_context=url_context, ip=ip, url=url)
 
 
+@app.route('/settings')
+def settings():
+    logger.info('settings()')
+
+    url_context = 'http://{0}:{1}/device/settings'.format('192.168.0.100', '3000')
+    res = requests.get(
+        url=url_context,
+        # params=params
+    )
+    print res.content
+    return render_template('settings.html')
+
 class User(UserMixin):
     def __init__(self, id):
         self.id = id

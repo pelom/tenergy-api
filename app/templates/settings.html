@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="login">
+    <h4>Login da aplicação</h4>
+    <hr>
+    <form class="login-inner" action="" method="post">
+        <div class="form-group">
+            <label>Battery Capacity (Ah)</label>
+            <input type="text" class="form-control" value="{% setting.BatteryCapacity %}">
+        </div>
+        <div class="form-group">
+            <label for="formGroupExampleInput2">Battery Rated Voltage</label>
+            <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!--script type="text/javascript" src="{{ url_for('static', filename='js/gauge.min.js') }}"></script-->
+{% endblock %}
