@@ -11,13 +11,15 @@ from entity.sampleStatistical import SampleStatistical
 
 from sqlalchemy import func, desc
 import sqlalchemy as sa
+
+
 class SampleService(object):
     def __init__(self, tracer_service=None, database=None):
         if tracer_service is None:
             raise ValueError('tracer_service is NULL')
 
-        if database is None:
-            raise ValueError('database is NULL')
+        #if database is None:
+        #    raise ValueError('database is NULL')
 
         self.database = database
         self.tracer_service = tracer_service
