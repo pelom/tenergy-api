@@ -64,12 +64,15 @@ def device_settings_post():
     content = request.get_json(silent=True)
 
     charge_port = request.headers.get('charge_port', usb_port)
-    tracer_service = get_instance_tracer(charge_port)
 
-    for param in content:
-        print param['key'], param['value']
+    try:
+        tracer_service = get_instance_tracer(charge_port)
+        for param in content:
+            print param['key'], param['value']
+            tracer_service.write_value(param['key'], param['value'])
 
-    print tracer_service.read_value(param['key'])
+    except Exception, ex:
+        return jsonify({'code': 500, 'status': str(ex)})
 
     return jsonify({'code': 200, 'status': 'Success'})
 
@@ -96,6 +99,7 @@ def device_statistical():
 
     sample = sample_service.sample_statistical()
     return jsonify(sample.to_json())
+
 
 if __name__ == "__main__":
     serve_config = config.get('servetracer')
