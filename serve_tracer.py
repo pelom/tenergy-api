@@ -1,3 +1,5 @@
+import os
+
 from env import log, config
 
 from flask import Flask, jsonify, request, render_template, url_for, redirect, abort
@@ -12,7 +14,7 @@ logger.info('ServeTracer')
 app = Flask('ServeTracer')
 app.config.update(
     DEBUG=True,
-    SECRET_KEY='secret_xxx')
+    SECRET_KEY=os.urandom(24))
 
 
 def get_instance_tracer(charge_port):

@@ -125,6 +125,9 @@ class ChargeEquipmentService(object):
         value = self.tracer_service.read_value('Light signal turn off(day) delay time')
         value_map.setdefault('DayTimeThresholdDelay', value.value)
 
+        value = self.tracer_service.read_value('Default Load On/Off in manual mode')
+        value_map.setdefault('DefaultLoadManualMode', ChargeEquipmentService.define_option(value))
+
         self.tracer_service.disconnect()
 
         return value_map

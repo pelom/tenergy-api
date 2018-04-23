@@ -9,10 +9,10 @@ from entity.database import Database
 from service.tracerService import TracerService
 from service.chargeEquipmentService import ChargeEquipmentService
 from service.sampleService import SampleService
+from service.user_service import UserService
 
 from flask import Flask, jsonify, request, render_template, url_for, redirect, abort
-from flask_login import LoginManager, UserMixin, \
-    login_required, login_user, logout_user
+from flask_login import LoginManager, login_required, login_user, logout_user
 
 logger = log(__name__)
 logger.info('Tenergy Serve')
@@ -34,6 +34,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
+user_service = UserService(database)
+
+
 def get_instance_tracer(charge_port):
     return TracerService(serialclient=None, port=charge_port)
 
@@ -45,9 +48,6 @@ def get_instance_equip(tracer_client):
 def get_instance_sample(tracer_client):
     return SampleService(tracer_service=tracer_client, database=database)
 
-
-login_manager = LoginManager()
-login_manager.init_app(app)
 
 @app.route("/device", methods=['GET'])
 def device():
@@ -111,6 +111,7 @@ def device_monitorredirect():
     print r.content
     return jsonify(r.json())
 
+
 @app.route("/device/grouphourredirect", methods=['GET'])
 def device_grouphourredirect():
     logger.info('grouphourredirect()')
@@ -123,6 +124,7 @@ def device_grouphourredirect():
     )
     print r.content
     return jsonify(r.json())
+
 
 @app.route("/device/grouphour", methods=['GET'])
 def device_grouphour():
@@ -139,6 +141,7 @@ def device_grouphour():
 
     sample = sample_service.get_sample_hour(now=now)
     return jsonify(sample)
+
 
 @app.route("/device/monitor", methods=['GET'])
 def device_monitor():
@@ -189,6 +192,7 @@ def home():
 
 
 @app.route('/settings')
+@login_required
 def settings():
     logger.info('settings()')
 
@@ -216,59 +220,69 @@ def settings():
     charging_percentage = setting['ChargingPercentage']
     discharging_percentage = setting['DischargingPercentage']
 
+    high_voltage_disconnect = setting['HighVoltageDisconnect']
+    high_voltage_reconnect = setting['HighVoltageReconnect']
+
+    low_voltage_disconnect = setting['LowVoltageDisconnect']
+    low_voltage_reconnect = setting['LowVoltageReconnect']
+
+    equalization_voltage = setting['EqualizationVoltage']
+    boost_voltage = setting['BoostVoltage']
+    float_voltage = setting['FloatVoltage']
+
+    charging_limit_voltage = setting['ChargingLimitVoltage']
+    discharging_limit_voltage = setting['DischargingLimitVoltage']
+
+    boost_reconnect_voltage = setting['BoostReconnectVoltage']
+    under_voltage_recover = setting['UnderVoltageRecover']
+    under_voltage_warning = setting['UnderVoltageWarning']
+
+    boost_duration = setting['BoostDuration']
+    equalize_duration = setting['EqualizeDuration']
+
+    equalization_charging_cycle = setting['EqualizationChargingCycle']
+    temperature_compensation_coefficient = setting['TemperatureCompensationCoefficient']
+
     return render_template('settings.html', **locals())
 
-class User(UserMixin):
-    def __init__(self, id):
-        self.id = id
-        self.name = "user" + str(id)
-        self.password = self.name + "_secret"
-
-    def __repr__(self):
-        return "%d/%s/%s" % (self.id, self.name, self.password)
-
-users = [User(id) for id in range(1, 21)]
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    print 'login()'
+    logger.info('login()')
 
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
-        print 'username: ', username
-
-        if password == username + "_secret":
-            id = username.split('user')[1]
-            user = User(id)
-            login_user(user)
+        user_session = user_service.login_user(username, password)
+        if user_session is not None:
+            login_user(user_session)
             return redirect(request.args.get("next"))
-        else:
-            return abort(401)
+
+        return abort(401)
 
     return render_template('login.html')
 
-# somewhere to logout
+
 @app.route("/logout")
 @login_required
 def logout():
+    logger.info('logout()')
     logout_user()
-    #return Response('<p>Logged out</p>')
     return redirect('login')
 
-# handle login failed
+
 @app.errorhandler(401)
 def page_not_found(e):
-    print 'page_not_found()', e
-    return redirect('login')
+    logger.info('page_not_found()', e)
+    return redirect(url_for('login', next=request.path))
 
 
-# callback to reload the user object
 @login_manager.user_loader
-def load_user(userid):
-    print 'load_user() userid: ', userid
-    return User(userid)
+def load_user(session_id):
+    logger.info('load_user()')
+    return user_service.get_user_by_session(session_id)
+
 
 if __name__ == "__main__":
     serve_config = config.get('serve')

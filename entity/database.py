@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 
+from user import User, Base as UserBase
 from chargeEquipment import ChargeEquipment, Base as ChargeEquipmentBase
 from sample import Sample, Base as SampleBase
 from sampleStatistical import SampleStatistical, Base as SampleStatisticalBase
@@ -49,6 +50,7 @@ class Database(object):
         ChargeEquipmentBase.metadata.create_all(self.engine)
         SampleBase.metadata.create_all(self.engine)
         SampleStatisticalBase.metadata.create_all(self.engine)
+        UserBase.metadata.create_all(self.engine)
 
     def create_session(self):
         logger.info('create_session()')
