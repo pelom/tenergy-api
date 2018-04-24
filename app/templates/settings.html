@@ -1,65 +1,66 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<form action="" method="post">
+<form action="/settings" method="post">
     <h6>Battery</h6>
     <hr>
+
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <small>Capacity (Ah)</small>
-                <input type="text" class="form-control" value="{{ battery_capacity }}">
+                <input type="text" class="form-control" name="battery_capacity" value="{{ battery_capacity }}">
             </div>
             <div class="form-group">
                 <small>Type</small>
-                <select class="form-control">
+                <select class="form-control" name="battery_type_value">
                     {% for value in battery_type %}
-                    <option value="{{ value }}" {% if value == battery_type_value %} selected {% endif %}>{{ value }}</option>
+                    <option value="{{ loop.index-1 }}" {% if value == battery_type_value %} selected {% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group">
                 <small>Charging %</small>
-                <input type="text" class="form-control" value="{{ charging_percentage }}">
+                <input type="text" class="form-control" name="charging_percentage" value="{{ charging_percentage }}">
             </div>
             <div class="form-group">
                 <small>Equalize Duration (Minute)</small>
-                <input type="text" class="form-control" value="{{ equalize_duration }}">
+                <input type="text" class="form-control" name="equalize_duration" value="{{ equalize_duration }}">
             </div>
             <div class="form-group">
                 <small>Equalization Charging Cycle</small>
-                <input type="text" class="form-control" value="{{ equalization_charging_cycle }}">
+                <input type="text" class="form-control" name="equalization_charging_cycle" value="{{ equalization_charging_cycle }}">
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="form-group">
                 <small>Rated Voltage</small>
-                <select class="form-control">
+                <select class="form-control" name="battery_rated_voltage_value">
                     {% for value in battery_rated_voltage %}
-                    <option value="{{ value }}" {% if value == battery_rated_voltage_value %} selected {% endif %}>{{ value }}</option>
+                    <option value="{{ loop.index-1 }}" {% if value == battery_rated_voltage_value %} selected {% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group">
                 <small>Management Mode</small>
-                <select class="form-control">
+                <select class="form-control" name="management_mode_battery_value">
                     {% for value in management_mode_battery %}
-                    <option value="{{ value }}" {% if value == management_mode_battery_value %} selected {% endif %}>{{ value }}</option>
+                    <option value="{{ loop.index-1 }}" {% if value == management_mode_battery_value %} selected {% endif %}>{{ value }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group">
                 <small>Discharging %</small>
-                <input type="text" class="form-control" value="{{ discharging_percentage }}">
+                <input type="text" class="form-control" name="discharging_percentage" value="{{ discharging_percentage }}">
             </div>
             <div class="form-group">
                 <small>Boost Duration (Minute)</small>
-                <input type="text" class="form-control" value="{{ boost_duration }}">
+                <input type="text" class="form-control" name="boost_duration" value="{{ boost_duration }}">
             </div>
             <div class="form-group">
                 <small>Temperature Compensation Coefficient</small>
-                <input type="text" class="form-control" value="{{ temperature_compensation_coefficient }}">
+                <input type="text" class="form-control" name="temperature_compensation_coefficient" value="{{ temperature_compensation_coefficient }}">
             </div>
         </div>
     </div>
@@ -131,7 +132,9 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="col-md-6">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
     </div>
 
 </form>

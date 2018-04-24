@@ -14,6 +14,8 @@ from service.user_service import UserService
 from flask import Flask, jsonify, request, render_template, url_for, redirect, abort
 from flask_login import LoginManager, login_required, login_user, logout_user
 
+from controller.charge_settings import charge_settings
+
 logger = log(__name__)
 logger.info('Tenergy Serve')
 
@@ -35,6 +37,8 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 user_service = UserService(database)
+
+app.register_blueprint(charge_settings)
 
 
 def get_instance_tracer(charge_port):
@@ -191,59 +195,66 @@ def home():
     return render_template('home.html', url_context=url_context, ip=ip, url=url)
 
 
-@app.route('/settings')
-@login_required
-def settings():
-    logger.info('settings()')
+@app.route('/index')
+def index():
+    url_context = 'http://{0}:{1}/'.format('192.168.0.1', '5000')
+    ip = request.remote_addr
+    url = request.url
+    return render_template('home.html', url_context=url_context, ip=ip, url=url)
 
-    url_context = 'http://{0}:{1}/device/settings'.format('192.168.0.100', '3000')
-    res = requests.get(
-        url=url_context,
-        # params=params
-    )
-
-    setting = res.json()
-    battery_capacity = setting['BatteryCapacity']
-
-    temp = setting['BatteryRatedVoltage']
-    battery_rated_voltage = temp['Values']
-    battery_rated_voltage_value = temp['Name']
-
-    temp = setting['BatteryType']
-    battery_type = temp['Values']
-    battery_type_value = temp['Name']
-
-    temp = setting['ManagementModeBattery']
-    management_mode_battery = temp['Values']
-    management_mode_battery_value = temp['Name']
-
-    charging_percentage = setting['ChargingPercentage']
-    discharging_percentage = setting['DischargingPercentage']
-
-    high_voltage_disconnect = setting['HighVoltageDisconnect']
-    high_voltage_reconnect = setting['HighVoltageReconnect']
-
-    low_voltage_disconnect = setting['LowVoltageDisconnect']
-    low_voltage_reconnect = setting['LowVoltageReconnect']
-
-    equalization_voltage = setting['EqualizationVoltage']
-    boost_voltage = setting['BoostVoltage']
-    float_voltage = setting['FloatVoltage']
-
-    charging_limit_voltage = setting['ChargingLimitVoltage']
-    discharging_limit_voltage = setting['DischargingLimitVoltage']
-
-    boost_reconnect_voltage = setting['BoostReconnectVoltage']
-    under_voltage_recover = setting['UnderVoltageRecover']
-    under_voltage_warning = setting['UnderVoltageWarning']
-
-    boost_duration = setting['BoostDuration']
-    equalize_duration = setting['EqualizeDuration']
-
-    equalization_charging_cycle = setting['EqualizationChargingCycle']
-    temperature_compensation_coefficient = setting['TemperatureCompensationCoefficient']
-
-    return render_template('settings.html', **locals())
+# @app.route('/settings')
+# @login_required
+# def settings():
+#     logger.info('settings()')
+#
+#     url_context = 'http://{0}:{1}/device/settings'.format('192.168.0.100', '3000')
+#     res = requests.get(
+#         url=url_context,
+#         # params=params
+#     )
+#
+#     setting = res.json()
+#     battery_capacity = setting['BatteryCapacity']
+#
+#     temp = setting['BatteryRatedVoltage']
+#     battery_rated_voltage = temp['Values']
+#     battery_rated_voltage_value = temp['Name']
+#
+#     temp = setting['BatteryType']
+#     battery_type = temp['Values']
+#     battery_type_value = temp['Name']
+#
+#     temp = setting['ManagementModeBattery']
+#     management_mode_battery = temp['Values']
+#     management_mode_battery_value = temp['Name']
+#
+#     charging_percentage = setting['ChargingPercentage']
+#     discharging_percentage = setting['DischargingPercentage']
+#
+#     high_voltage_disconnect = setting['HighVoltageDisconnect']
+#     high_voltage_reconnect = setting['HighVoltageReconnect']
+#
+#     low_voltage_disconnect = setting['LowVoltageDisconnect']
+#     low_voltage_reconnect = setting['LowVoltageReconnect']
+#
+#     equalization_voltage = setting['EqualizationVoltage']
+#     boost_voltage = setting['BoostVoltage']
+#     float_voltage = setting['FloatVoltage']
+#
+#     charging_limit_voltage = setting['ChargingLimitVoltage']
+#     discharging_limit_voltage = setting['DischargingLimitVoltage']
+#
+#     boost_reconnect_voltage = setting['BoostReconnectVoltage']
+#     under_voltage_recover = setting['UnderVoltageRecover']
+#     under_voltage_warning = setting['UnderVoltageWarning']
+#
+#     boost_duration = setting['BoostDuration']
+#     equalize_duration = setting['EqualizeDuration']
+#
+#     equalization_charging_cycle = setting['EqualizationChargingCycle']
+#     temperature_compensation_coefficient = setting['TemperatureCompensationCoefficient']
+#
+#     return render_template('settings.html', **locals())
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -257,7 +268,9 @@ def login():
         user_session = user_service.login_user(username, password)
         if user_session is not None:
             login_user(user_session)
-            return redirect(request.args.get("next"))
+
+            next = request.args.get('next')
+            return redirect(next or url_for('index'))
 
         return abort(401)
 

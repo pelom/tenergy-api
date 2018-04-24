@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Tenergy Solar App</title>
+    <title>Tenergy Solar</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/web-fonts-with-css/css/fontawesome-all.css') }}">
@@ -16,20 +16,22 @@
 <body>
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
     <h5 class="my-0 mr-md-auto font-weight-normal">
-       <i class="fas fa-sun"></i> Tenergy Solar App <i class="fas fa-bolt"></i>
+       <i class="fas fa-sun"></i> <i class="fas fa-bolt"></i>
+        <a class="p-2 text-dark" href="/">Tenergy Solar</a>
     </h5>
     <nav class="my-2 my-md-0 mr-md-3">
         {% if current_user.is_authenticated %}
+            <a class="p-2 text-dark" href="/settings"><i class="fas fa-wrench"></i> <small>Settings</small></a>
             <a class="p-2 text-dark" href="#"><i class="fas fa-user-circle"></i> {{ current_user.first_name }}</a>
-            <a class="p-2 text-dark" href="logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
+        <a class="p-2 text-dark" href="logout"><i class="fas fa-sign-out-alt"></i> <small>Sair</small></a>
         {% endif %}
-        <!--a class="p-2 text-dark" href="#">Features</a>
-        <a class="p-2 text-dark" href="#">Enterprise</a>
+
+        <!--a class="p-2 text-dark" href="#">Enterprise</a>
         <a class="p-2 text-dark" href="#">Support</a>
         <a class="p-2 text-dark" href="#">Pricing</a-->
     </nav>
     {% if not current_user.is_authenticated %}
-    <a class="btn btn-outline-primary" href="/login">Login</a>
+        <a class="btn btn-outline-primary" href="/login">Login</a>
     {% endif %}
 </div>
 

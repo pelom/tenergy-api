@@ -1,4 +1,8 @@
 import os
+import jwt
+
+from service.user_service import UserService
+from entity.database import Database
 
 from env import log, config
 
@@ -16,6 +20,8 @@ app.config.update(
     DEBUG=True,
     SECRET_KEY=os.urandom(24))
 
+database = Database.get_instance()
+user_service = UserService(database)
 
 def get_instance_tracer(charge_port):
     return TracerService(serialclient=None, port=charge_port)
@@ -66,15 +72,21 @@ def device_settings_post():
     content = request.get_json(silent=True)
 
     charge_port = request.headers.get('charge_port', usb_port)
+    authorization = request.headers.get('Authorization', None)
 
-    try:
-        tracer_service = get_instance_tracer(charge_port)
-        for param in content:
-            print param['key'], param['value']
-            tracer_service.write_value(param['key'], param['value'])
+    if authorization is None:
+        return jsonify({'code': 401, 'status': 'Not Access'})
 
-    except Exception, ex:
-        return jsonify({'code': 500, 'status': str(ex)})
+    user = UserService.get_user_by_session(authorization)
+    print user
+    # try:
+    #     tracer_service = get_instance_tracer(charge_port)
+    #     for param in content:
+    #         print param['key'], param['value']
+    #         tracer_service.write_value(param['key'], param['value'])
+    #
+    # except Exception, ex:
+    #     return jsonify({'code': 500, 'status': str(ex)})
 
     return jsonify({'code': 200, 'status': 'Success'})
 
