@@ -29,8 +29,8 @@ class UserSession(UserMixin):
     def get_id(self):
         return unicode(self.session_token)
 
-    def __repr__(self):
-        return "%s" % (self.session_token)
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
 
 
 class UserService(object):
@@ -80,8 +80,6 @@ class UserService(object):
             return None
 
         payload = UserService.decode_auth_token(session_id)
-
-        logger.info('payload: {0}'.format(payload))
 
         if payload is None:
             return None

@@ -84,14 +84,14 @@ def device_settings_post():
         return jsonify({'code': 401, 'status': 'Not Access'})
 
     logger.info('user: {0}'.format(user))
-    # try:
-    #     tracer_service = get_instance_tracer(charge_port)
-    #     for param in content:
-    #         print param['key'], param['value']
-    #         tracer_service.write_value(param['key'], param['value'])
-    #
-    # except Exception, ex:
-    #     return jsonify({'code': 500, 'status': str(ex)})
+    try:
+        tracer_service = get_instance_tracer(charge_port)
+        for param in content:
+            print param['key'], param['value']
+            #tracer_service.write_value(param['key'], param['value'])
+
+    except Exception, ex:
+        return jsonify({'code': 500, 'status': str(ex)})
 
     return jsonify({'code': 200, 'status': 'Success'})
 
