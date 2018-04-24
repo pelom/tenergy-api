@@ -78,6 +78,10 @@ def device_settings_post():
         return jsonify({'code': 401, 'status': 'Not Access'})
 
     user = UserService.get_user_by_session(authorization)
+
+    if user is None:
+        return jsonify({'code': 401, 'status': 'Not Access'})
+
     print user
     # try:
     #     tracer_service = get_instance_tracer(charge_port)
