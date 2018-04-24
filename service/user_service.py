@@ -81,6 +81,8 @@ class UserService(object):
 
         payload = UserService.decode_auth_token(session_id)
 
+        logger.info('payload: {0}'.format(payload))
+
         if payload is None:
             return None
 
