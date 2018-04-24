@@ -84,7 +84,7 @@ def device_settings_post():
         return jsonify({'code': 401, 'status': 'Not Access'})
 
     print user
-    logger.info('user: ', user)
+    logger.info('user: ', user.first_name)
     # try:
     #     tracer_service = get_instance_tracer(charge_port)
     #     for param in content:
