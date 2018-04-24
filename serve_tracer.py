@@ -69,6 +69,7 @@ def device_settings():
 
 @app.route("/device/settings", methods=['POST'])
 def device_settings_post():
+    logger.info('device_settings_post()')
     content = request.get_json(silent=True)
 
     charge_port = request.headers.get('charge_port', usb_port)
@@ -83,6 +84,7 @@ def device_settings_post():
         return jsonify({'code': 401, 'status': 'Not Access'})
 
     print user
+    logger.info('user: ', user)
     # try:
     #     tracer_service = get_instance_tracer(charge_port)
     #     for param in content:
